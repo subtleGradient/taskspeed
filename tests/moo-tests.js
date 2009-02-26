@@ -17,7 +17,7 @@ window.tests = {
 				)
 			;
 		}
-		return $$('ul.fromcode', true).length;
+		return $$('ul.fromcode').length;
 	},
 	
 	"indexof" : function(){
@@ -45,7 +45,9 @@ window.tests = {
 		// find all ul elements in the page. 
 		// generate an array of their id's
 		// return the length of that array
-		return $$('ul').get('id').length;
+		return $$('ul').map(function(el){
+			return el.id ? el.id : null;
+		}).length;
 	},
 	
 	"bindattr" : function(){
@@ -54,7 +56,9 @@ window.tests = {
 		//	set the rel="" attribute of those nodes to 'touched'
 		//	disconnect the mouseover event
 		//	return the length of the connected nodes
-		return $$('ul > li').addEvent('mouseover', $empty).set('rel','touched').removeEvent('mouseover').length;
+		return $$('ul > li').map(function(el){
+			return el.addEvent('mouseover', $empty).set('rel','touched').removeEvent('mouseover', $empty);
+		}).length;
 	},
 
 	"table": function(){
@@ -68,10 +72,10 @@ window.tests = {
 			
 			new Element('table',{ 'class':'madetable' })
 				.inject(document.body)
-				.adopt(
+				.grab(
 					new Element('tr')
-						.adopt( new Element('td',{ html:'first' }) )
-						.adopt( new Element('td'), 'top')
+						.grab( new Element('td',{ html:'first' }) )
+						.grab( new Element('td'), 'top')
 				)
 			;
 		}
@@ -85,7 +89,9 @@ window.tests = {
 		//
 		//	return length of found nodes (that which had anchors appended)
 		//	appendText
-		return $$('.fromcode > li').adopt(new Element('a',{ html:'link', href:'http://example.com' })).length;
+		return $$('.fromcode > li').map(function(el){
+			return el.grab(new Element('a',{ html:'link', href:'http://example.com' }));
+		}).length;
 	},
 
 	"alt-add" : function(){
@@ -99,7 +105,10 @@ window.tests = {
 		//		locate the <body> element and append a new <div>
 		//			- the attribute rel="foo" must exist
 		//			- the inner content must be 'test'
-		//	
+		for (var i = 0; i<500; i++){
+			$(document.body).grab(new Element('div', {rel: 'foo', html: 'test'}));
+		}
+		return $$("[rel^='foo']").length;
 		//	return the length of the matches for the selectore "[rel^='foo']"		
 	},
 	
@@ -108,7 +117,10 @@ window.tests = {
 		//		create a new <div> with the same critera as 'create'
 		//			- NOTE: rel needs to be == "foo2"
 		//		then append to body element (no caching)
-		//		
+		for (var i = 0; i<500; i++){
+			$(document.body).grab(new Element('div', {rel: 'foo2'}));
+		}
+		return $$('div[rel^="foo2"]').length;
 		//	return then length of the matches from the selector "div[rel^='foo2']" 
 	},
 	
@@ -116,7 +128,10 @@ window.tests = {
 		// locate all div elements on the page
 		//	add the class "added" to those divs
 		//	add the class "odd" to the odd divs in the selection
-		//
+		return $$('div').map(function(d, i){
+			d.addClass('added');
+			if (i % 2) return d.addClass('odd');
+		}).length;
 		// return the lenght of the odd found divs
 	},
 	
@@ -125,24 +140,25 @@ window.tests = {
 		//	set those nodes' style properties:
 		//		background-color: #ededed
 		//		color: #fff
-		//	
+		return $$('.added').setStyles({'background-color': '#ededed', 'color': '#fff'}).length;
 		//	return the length of the modified nodes.
 	},
 	
 	"confirm-added" : function(){
 		// return the length of the query "div.added"
+		return $$('div.added').length;
 	},
 	
 	"removeclass": function(){
 		// find all nodes with the class "added"
 		// remove the class "added"
-		//
+		return $$('div.added').removeClass('added').length;
 		// return the length of modified nodes 
 	},
 	
 	"sethtml": function(){
 		// replace the content of all div elements with "<p>new content</p>"
-		//
+		return $$('div').set('html', "<p>new content</p>").length;
 		// return the length of matched divs
 	},
 	
@@ -151,7 +167,9 @@ window.tests = {
 		// reduce that list with a modulo of 50
 		//		(eg: Array.filter(function(n,i){ return i % 50 === 0 })))
 		// set the content of the matches to "<p>alt content</p>"
-		//
+		return $$('div.odd').filter(function(div,i){
+			if (i % 50 === 0) div.set('html', "<p>alt content</p>");
+		}).length;
 		// retun the length of the reduced matches
 	},
 	
@@ -159,7 +177,9 @@ window.tests = {
 		//	find all anchors in the class "fromcode" (.fromcode a)
 		//		add a <p> element in the dom before the matched anchors
 		//			- the content should equal "A Link"
-		//		
+		return $$('.fromcode a').map(function(a){
+			new Element('p', {html: 'A Link'}).injectBefore(a);
+		}).length;
 		//	return the length of the found anchors.
 	},
 	
@@ -167,18 +187,21 @@ window.tests = {
 		//	find all anchors in the class "fromcode" (.fromcode a)
 		//		add a <p> element in the dom after the matched anchors
 		//			- the content should equial "After Link"
-		//			
+		return $$('.fromcode a').map(function(a){
+			new Element('p', {html: 'A Link'}).injectAfter(a);
+		}).length;
 		//	return the results of a ".fromcode a + p" selector 
 	},
 	
 	destroy: function(){ 
 		// destroy all the nodes with the class "fromcode"
 		// return the length of the destroyed nodes
+		return $$('fromcode').dispose().length;
 	},
 	
 	finale: function(){
 		// empty the body element of all elements
-		//
+		return $$('body *').dispose().length;
 		// return the length of the query "body *"
 	}
 	
