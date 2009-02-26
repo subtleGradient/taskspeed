@@ -3,7 +3,7 @@ window.tests = {
 	"make" : function(){
 		for(var i = 0; i<250; i++){
 			
-			new Element('ul', {'class':'fromcode'})
+			new Element('ul', { id:'setid'+i, 'class':'fromcode'})
 				.inject(document.body)
 				.adopt(
 					new Element('li', { html:'one' }),
@@ -85,7 +85,7 @@ window.tests = {
 		return $$('div').map(function(d, i){
 			d.addClass('added');
 			if (i % 2) return d.addClass('odd');
-		}).length;
+		}).clean().length;
 	},
 	
 	"style": function(){
@@ -106,7 +106,7 @@ window.tests = {
 	
 	"sethtml-alt" : function(){
 		return $$('div.odd').filter(function(div,i){
-			if (i % 50 === 0) div.set('html', "<p>alt content</p>");
+			if (i % 50 === 1) return div.set('html', "<p>alt content</p>");
 		}).length;
 	},
 	
@@ -123,7 +123,7 @@ window.tests = {
 	},
 	
 	destroy: function(){ 
-		return $$('fromcode').dispose().length;
+		return $$('.fromcode').dispose().length;
 	},
 	
 	finale: function(){
