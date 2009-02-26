@@ -1,3 +1,5 @@
+(function($){
+	
 window.tests = {
 	
 	"make": function(){
@@ -119,3 +121,5 @@ window.tests = {
 	}
 	
 }
+
+})(jQuery);
