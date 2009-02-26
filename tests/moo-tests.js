@@ -84,7 +84,8 @@ window.tests = {
 		//	append an anchor node with the text 'link' pointing to example.com
 		//
 		//	return length of found nodes (that which had anchors appended)
-		//	
+		//	appendText
+		return $$('.fromcode > li').adopt(new Element('a',{ html:'link', href:'http://example.com' })).length;
 	},
 
 	"alt-add" : function(){
