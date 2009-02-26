@@ -91,6 +91,18 @@ window.onload = function(){
 			test.cell.error = false;
 		}
 		
+		results.code = results.code.toString().replace(/^.*\{/,'').replace(/\s*\}\s*$/,'');
+		results.code = results.code.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/\t/g,'&nbsp;&nbsp;');
+		
+		test.cell.innerHTML = ['<a class="code"><pre>', results.code, '</pre></a>', test.cell.innerHTML].join('');
+		
+		test.cell.onclick = function(){
+			if (/showcode/.test(test.cell.className))
+				test.cell.className = test.cell.className.replace(' showcode','');
+			else
+				test.cell.className += ' showcode';
+		}
+		
 		score[test.name] += test.cell.speed;
 		scores[test.name].innerHTML =  '&nbsp;' + score[test.name] + '&nbsp;';
 		

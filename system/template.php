@@ -11,14 +11,16 @@
 	<script type="text/javascript">
 				
 		function test(selector){
+			var code = tests[selector];// && (tests[selector].toSource || tests[selector].toString)();
 			try {
-				var start = new Date().getTime();
+				var start = new Date();
 				var elements = tests[selector] ? tests[selector]() : -1;
-				var end = new Date().getTime() - start;
-				return {'time': Math.round(end), 'found': elements };
+				var end = new Date();
+				return {'time': Math.round(end - start), 'found': elements, 'code':code };
 			} catch(err){
+				var end = new Date();
 				if (elements == undefined) elements = {length: -1};
-				return ({'time': new Date().getTime() - start, 'found': elements, 'error': err});
+				return ({'time': Math.round(end - start), 'found': elements, 'error': err, 'code':code });
 			}
 		}
 	

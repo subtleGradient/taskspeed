@@ -179,3 +179,40 @@ div#footer p {
 	color: #B9ACAC;
 }
 
+
+td a.code{
+	position:relative;
+}
+td a.code pre{
+	text-align: left !important;
+	font-family: Monaco, monospace;
+	font-weight: normal;
+	font-size:10px;
+	position: absolute;
+	top: 100%;
+	right: 0px;
+/*	width: 200px;*/
+	background: #111;
+	color:#fff;
+	border:2px solid #333;
+	padding:1em;
+	overflow:auto;
+}
+td{
+	cursor: pointer;
+}
+td a.code{display:block;}
+td a.code pre{display:none;}
+td.showcode:hover a.code pre {
+	background:#000;
+	z-index: 100 !important;
+	-webkit-box-shadow: 0px 2px 10px #000;
+}
+td.showcode a.code pre{display:block;}
+/*td:hover a.code pre{display:block;}*/
+
+td:first-of-type a.code pre{
+	left:0px !important;
+	right:auto !important;
+}
+
