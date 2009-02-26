@@ -1,0 +1,9 @@
+Test Definitions. 
+~~~~~~~~~~~~~~~~
+
+Each framework gets a single [foo]-test.js file, creating a global 'tests' object.
+Each key in the object is a test identifier:
+
+window.tests = { "make": function(){ /* satisfy the 'make' test critera */ } };
+
+the sample-tests.js is a skeleton of all available tests with verbal descriptions as to how they should behave.
