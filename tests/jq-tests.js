@@ -1,6 +1,4 @@
-window.tests = (function($){
-	
-return {
+window.tests = {
 	
 	"make": function(){
 		for(var i = 0; i<250; i++){
@@ -121,5 +119,3 @@ return {
 	}
 	
 }
-
-})(jQuery);
