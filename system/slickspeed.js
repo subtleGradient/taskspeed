@@ -79,7 +79,7 @@ window.onload = function(){
 		if (!test) return;
 		var results = test.execute(test.selector);
 		test.cell.className = 'test';
-		test.cell.innerHTML = results.time + ' ms | ' + results.found + ' found';
+		test.cell.innerHTML = '<b>'+results.time + ' ms</b><b>' + results.found + ' found</b>';
 		test.cell.speed = results.time;
 		if (results.error){
 			test.cell.innerHTML = results.time + ' ms | <span class="exception" title="' + results.error + '">error returned</a>';
@@ -107,7 +107,7 @@ window.onload = function(){
 		scores[test.name].innerHTML =  '&nbsp;' + score[test.name] + '&nbsp;';
 		
 		if (test.cell == test.row.lastChild) colourRow(test.row);
-		timer = setTimeout(testRunner, 250);
+		timer = setTimeout(testRunner, 25);
 	};
 	
 	var colourRow = function(row){
