@@ -1,6 +1,6 @@
-(function($){
+window.tests = (function($){
 	
-window.tests = {
+return {
 	
 	"make": function(){
 		for(var i = 0; i<250; i++){
