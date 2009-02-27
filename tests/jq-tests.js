@@ -10,9 +10,9 @@ window.tests = {
 	},
 	
 	"indexof" : function(){
-		var n;
+		var n, id;
 		for(var i = 0; i < 20; i++){
-			var id = $("#setid150");
+			id = $("#setid150");
 			n = $("ul").index(id)
 		}
 		return n;
@@ -93,19 +93,17 @@ window.tests = {
 	
 	"sethtml-alt" : function(){
 		// only reducing this because .html can't handle 5000 either
-		var q = $(".odd").map(function(i){
+		return $(".odd").map(function(i){
 			return i % 50 === 0 ? this : null;
-		});
-		return q.html("<p>alt content</p>").length;	
+		}).length;
 	},
 	
 	"insertbefore" : function(){
-		return $(".fromcode a").before($("<p/>").text("A Link")).length;
+		return $(".fromcode a").before($("<p>A Link</p>")).length;
 	},
 	
 	"insertafter" : function(){
-		$(".fromcode a").after($("<p/>").text("After Link"));
-		return $(".fromcode a + p").length;
+		return $(".fromcode a").after($("<p>After Link</p>")).length;
 	},
 	
 	destroy: function(){
@@ -113,7 +111,6 @@ window.tests = {
 	},
 	
 	finale: function(){
-		//$("body > *").remove(); // ? 
 		$("body").empty();
 		return $("body *").length;
 	}
