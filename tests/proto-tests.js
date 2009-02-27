@@ -4,9 +4,9 @@ window.tests = {
 		for (var i = 0; i < 250; i++) {
 			
 			fromcode = new Element('ul').addClassName('fromcode').writeAttribute('id','setid'+i);
-			document.body.appendChild(fromcode);
+			$(document.body).insert(fromcode);
 			$w('one two three').each( function(word){
-				fromcode.appendChild(new Element('li').update(word));
+				fromcode.insert(new Element('li').update(word));
 			});
 		}
 		return $$('ul.fromcode').length;
@@ -46,15 +46,14 @@ window.tests = {
 		var table, tr;
 		for (var i = 0; i < 40; i++) {
 			
-			table = new Element('table', { 'class': 'madetable' });
-			document.body.appendChild(table);
-			
-			tr = new Element('tr');
-			tr.appendChild(new Element('td'));
-			
-			table.appendChild(tr);
-			
-			tr.insert({ top: new Element('td') });  
+			$(document.body).insert(
+				new Element('table', { 'class': 'madetable' })
+					.insert(
+						new Element('tr')
+							.insert(new Element('td'))
+							.insert({ top: new Element('td') })
+					)
+			);
 		}
 		return $$('tr td').length;
 	},
@@ -63,7 +62,7 @@ window.tests = {
 		var LIs = $$('.fromcode > li');
 		
 		LIs.each( function(li) {
-			li.appendChild(new Element('a', { href: 'http://example.com' }).update('link'));
+			li.insert(new Element('a', { href: 'http://example.com' }).update('link'));
 		});
 		
 		return LIs.length;  
@@ -76,7 +75,7 @@ window.tests = {
 	"create" : function(){
 		for (var i = 0; i < 500; i++) {
 			
-			document.body.appendChild(new Element('div', { rel: 'foo' }).update('test'));
+			$(document.body).insert(new Element('div', { rel: 'foo' }).update('test'));
 		}
 		return $$("[rel^='foo']").length;
 	},
@@ -84,7 +83,7 @@ window.tests = {
 	"append" : function(){
 		for (var i = 0; i < 500; i++) {
 			
-			document.body.appendChild(new Element('div', { rel: 'foo2' }));
+			$(document.body).insert(new Element('div', { rel: 'foo2' }));
 		}
 		return $$("[rel^='foo2']").length;
 	},
