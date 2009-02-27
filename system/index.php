@@ -16,7 +16,11 @@
 	<script type="text/javascript">
 		<?php
 		$selectors = explode("\n", $selectors);
-		foreach ($selectors as $i => $selector) $list[$i] = "'".$selector."'";
+		foreach ($selectors as $i => $selector) {
+			if ( $selector ) {
+				$list[$i] = "'".$selector."'";
+			}
+		}
 		$list = implode(',', $list);
 		echo "window.selectors = [$list]";
 		?>
@@ -61,13 +65,15 @@
 	<tbody id="tbody">
 		<?php
 			foreach ($selectors as $selector){
-				echo "<tr>";
-				$selector = str_replace('%', '', $selector);
-				echo "<th class='selector'>$selector</th>";
-				foreach ($frameworks as $framework){
-					echo "<td class='empty'></td>";
+				if ( $selector ) {
+					echo "<tr>";
+					$selector = str_replace('%', '', $selector);
+					echo "<th class='selector'>$selector</th>";
+					foreach ($frameworks as $framework){
+						echo "<td class='empty'></td>";
+					}
+					echo "</tr>";
 				}
-				echo "</tr>";
 			}
 		?>
 	</tbody>
