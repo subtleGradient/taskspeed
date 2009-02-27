@@ -1,9 +1,10 @@
 window.tests = {
 	
 	"make" : function(){
-		//	Create and append (to the body element) 250:
-		//		Unordered lists with the class "fromcode"
-		//		and the id "setid" + i
+		//	in a 250 iteration loop:
+		//		create an unordered lists with the class "fromcode"
+		//		add the id "setid" + i
+		//		append it to the body 
 		//		add three li's with the words "one", "two", "three", respectively.
 		//
 		//	return the result of the selector ul.fromcode
@@ -38,13 +39,12 @@ window.tests = {
 	},
 
 	"table": function(){
-		// Create 40 and append to the body element:
-		//		Tables with the class "madetable"
+		// in a 40-iteration for loop:
+		//		create a table with the class "madetable", and append it to the DOM
 		//		add a row with one cell to the table. the cell content should be "first"
-		// Use a query to find all the row just inserted (recommended: '.madetable tr')
 		//		add a new cell before the first cell in the row.
 		//
-		//	return the length of the query "td"
+		//	return the length of the query "tr td"
 	},
 	
 	"addanchor" : function(){
@@ -57,9 +57,12 @@ window.tests = {
 	},
 
 	"append" : function(){
-		//	Append 500 to the body element:
-		//    A div with a rel="foo" and inner contents equal to "test"
-		//	return the length of the matches for the selector "[rel^='foo']"		
+		//	in a 500 iteration loop:
+		//		create a new <div> with the same critera as 'create'
+		//			- NOTE: rel needs to be == "foo2"
+		//		then append to body element (no caching)
+		//		
+		//	return then length of the matches from the selector "div[rel^='foo2']" 
 	},
 	
 	"addclass-odd" : function(){

@@ -4,12 +4,12 @@ window.tests = {
 		for(var i = 0; i<250; i++){
 			
 			new Element('ul', { id:'setid'+i, 'class':'fromcode'})
-				.inject(document.body)
 				.adopt(
 					new Element('li', { html:'one' }),
 					new Element('li', { html:'two' }),
 					new Element('li', { html:'three' })
 				)
+				.inject(document.body)
 			;
 		}
 		return $$('ul.fromcode').length;

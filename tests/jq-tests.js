@@ -1,11 +1,11 @@
 window.tests = {
 	
 	"make": function(){
-		var str = "";
 		for(var i = 0; i<250; i++){
-			str += "<ul id='setid" + i + "' class='fromcode'><li>one</li><li>two</li><li>three</li></ul>";
+			$("<ul id='setid" + i + "' class='fromcode'></ul>")
+				.append("<li>one</li><li>two</li><li>three</li>")
+				.appendTo("body");
 		}
-		$("body").append(str);
 		return $("ul.fromcode").length;
 	},
 	
@@ -35,14 +35,13 @@ window.tests = {
 	},
 
 	"table": function(){
-		var str = "";
 		for(var i = 0; i < 40; i++){
-			str += "<table class='madetable'><tr><td>first</td></tr></table>";
+		  $("<table class='madetable'></table>")
+			.appendTo("body")
+			.html("<tr><td>first</td></tr>")
+			.find("tr").prepend("<td>before</td>");
 		}
-
-		$("body").append(str);
-		$(".madetable tr").prepend("<td>before</td>");
-		return $("td").length;
+		return $("tr td").length;
 	},
 	
 	"addanchor" : function(){
@@ -50,14 +49,12 @@ window.tests = {
 	},
 	
 	"append": function(){
-		var str = "";
 		for(var i = 0; i<500; i++){
-			str += "<div rel='foo'>test</div>";
+			$("body").append("<div rel='foo'>test</div>");
 		}
-		$("body").append(str);
 		return $("[rel^='foo']").length;
 	},
-	
+		
 	"addclass-odd" : function(){
 		return $("div").addClass("added").filter(":odd").addClass("odd").length;
 	},
