@@ -103,8 +103,7 @@ window.tests = {
 	},
 	
 	"insertafter" : function(){
-		dojo.query(".fromcode a").addContent("<p>After Link</p>", "after");
-		return dojo.query(".fromcode a + p").length;
+		return dojo.query(".fromcode a").addContent("<p>After Link</p>", "after").length;
 	},
 	
 	destroy: function(){ 

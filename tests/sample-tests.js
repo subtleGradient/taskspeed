@@ -108,7 +108,7 @@ window.tests = {
 		//		add a <p> element in the dom after the matched anchors
 		//			- the content should equial "After Link"
 		//			
-		//	return the results of a ".fromcode a + p" selector 
+		//	return the length of the found anchors.
 	},
 	
 	"destroy": function(){ 

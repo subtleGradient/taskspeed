@@ -138,8 +138,7 @@ window.tests = {
 		var anchors = $$(".fromcode a");
 		anchors.each( function(anchor) {
 			anchor.insert({ after: new Element('p').update("After Link") });
-		});
-		return $$(".fromcode a + p").length;
+		}).length;
 	},
 	
 	"destroy": function(){ 
