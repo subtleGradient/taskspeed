@@ -1,10 +1,9 @@
 window.tests = {
 	
 	"make" : function(){
-		//	in a 250 iteration loop:
-		//		create an unordered lists with the class "fromcode"
-		//		add the id "setid" + i
-		//		append it to the body 
+		//	Create and append (to the body element) 250:
+		//		Unordered lists with the class "fromcode"
+		//		and the id "setid" + i
 		//		add three li's with the words "one", "two", "three", respectively.
 		//
 		//	return the result of the selector ul.fromcode
@@ -39,12 +38,13 @@ window.tests = {
 	},
 
 	"table": function(){
-		// in a 40-iteration for loop:
-		//		create a table with the class "madetable", and append it to the DOM
+		// Create 40 and append to the body element:
+		//		Tables with the class "madetable"
 		//		add a row with one cell to the table. the cell content should be "first"
+		// Use a query to find all the row just inserted (recommended: '.madetable tr')
 		//		add a new cell before the first cell in the row.
 		//
-		//	return the length of the query "tr td"
+		//	return the length of the query "td"
 	},
 	
 	"addanchor" : function(){
@@ -56,28 +56,10 @@ window.tests = {
 		//	
 	},
 
-	"alt-add" : function(){
-		//	same as addanchor, but providing an alternate method. duplicate if need be.
-		//	
-		//	return length of found nodes (that which had anchors appended)
-	},
-	
-	"create" : function(){
-		//	in a 500 iteration loop:
-		//		locate the <body> element and append a new <div>
-		//			- the attribute rel="foo" must exist
-		//			- the inner content must be 'test'
-		//	
-		//	return the length of the matches for the selectore "[rel^='foo']"		
-	},
-	
 	"append" : function(){
-		//	in a 500 iteration loop:
-		//		create a new <div> with the same critera as 'create'
-		//			- NOTE: rel needs to be == "foo2"
-		//		then append to body element (no caching)
-		//		
-		//	return then length of the matches from the selector "div[rel^='foo2']" 
+		//	Append 500 to the body element:
+		//    A div with a rel="foo" and inner contents equal to "test"
+		//	return the length of the matches for the selector "[rel^='foo']"		
 	},
 	
 	"addclass-odd" : function(){
@@ -97,10 +79,6 @@ window.tests = {
 		//	return the length of the modified nodes.
 	},
 	
-	"confirm-added" : function(){
-		// return the length of the query "div.added"
-	},
-	
 	"removeclass": function(){
 		// find all nodes with the class "added"
 		// remove the class "added"
@@ -112,15 +90,6 @@ window.tests = {
 		// replace the content of all div elements with "<p>new content</p>"
 		//
 		// return the length of matched divs
-	},
-	
-	"sethtml-alt" : function(){
-		// find all nodes with the class "odd"
-		// reduce that list with a modulo of 50
-		//		(eg: Array.filter(function(n,i){ return i % 50 === 0 })))
-		// set the content of the matches to "<p>alt content</p>"
-		//
-		// retun the length of the reduced matches
 	},
 	
 	"insertbefore" : function(){
@@ -139,15 +108,15 @@ window.tests = {
 		//	return the results of a ".fromcode a + p" selector 
 	},
 	
-	destroy: function(){ 
+	"destroy": function(){ 
 		// destroy all the nodes with the class "fromcode"
 		// return the length of the destroyed nodes
 	},
 	
-	finale: function(){
+	"finale": function(){
 		// empty the body element of all elements
 		//
 		// return the length of the query "body *"
 	}
 	
-}
+};
