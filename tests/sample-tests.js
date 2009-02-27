@@ -3,6 +3,7 @@ window.tests = {
 	"make" : function(){
 		//	in a 250 iteration loop:
 		//		create an unordered lists with the class "fromcode"
+		//		add the id "setid" + i
 		//		append it to the body 
 		//		add three li's with the words "one", "two", "three", respectively.
 		//
