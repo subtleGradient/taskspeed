@@ -1,6 +1,6 @@
 window.tests = {
 	
-	"make" : function(){
+	"make": function(){
 		for(var i = 0; i<250; i++){
 			
 			new Element('ul', { id:'setid'+i, 'class':'fromcode'})
@@ -15,7 +15,7 @@ window.tests = {
 		return $$('ul.fromcode').length;
 	},
 	
-	"indexof" : function(){
+	"indexof": function(){
 		var id,ul,index;
 		for(var i = 0; i<20; i++){
 			id = $('setid150');
@@ -24,19 +24,15 @@ window.tests = {
 		return index;
 	},
 	
-	"bind" : function(){
+	"bind": function(){
 		return $$('ul > li').addEvent('click', $empty).length;
 	},
 	
-	"attr" : function(){
+	"attr": function(){
 		return $$('ul').get('id').length;
-		
-		// return $$('ul').map(function(el){
-		// 	return el.id ? el.id : null;
-		// }).length;
 	},
 	
-	"bindattr" : function(){
+	"bindattr": function(){
 		return $$('ul > li').map(function(el){
 			return el.addEvent('mouseover', $empty).set('rel','touched').removeEvent('mouseover', $empty);
 		}).length;
@@ -57,44 +53,44 @@ window.tests = {
 		return $$('tr td').length;
 	},
 	
-	"addanchor" : function(){
-		return $$('.fromcode > li').map(function(el){
+	"addanchor": function(){
+		return $$('ul.fromcode > li').map(function(el){
 			return el.grab(new Element('a',{ html:'link', href:'http://example.com' }));
 		}).length;
 	},
 
-	"alt-add" : function(){
-		return $$('.fromcode > li').map(function(el){
+	"alt-add": function(){
+		return $$('ul.fromcode > li').map(function(el){
 			return el.grab(new Element('a',{ html:'link', href:'http://example.com' }));
 		}).length;
 	},
 	
-	"create" : function(){
+	"create": function(){
 		for (var i = 0; i<500; i++){
 			$(document.body).grab(new Element('div', {rel: 'foo', html: 'test'}));
 		}
 		return $$("[rel^='foo']").length;
 	},
 	
-	"append" : function(){
+	"append": function(){
 		for (var i = 0; i<500; i++){
 			$(document.body).grab(new Element('div', {rel: 'foo2'}));
 		}
 		return $$('div[rel^="foo2"]').length;
 	},
 	
-	"addclass-odd" : function(){
-		return $$('div').map(function(d, i){
+	"addclass-odd": function(){
+		return $$('div').filter(function(d, i){
 			d.addClass('added');
 			if (i % 2) return d.addClass('odd');
-		}).clean().length;
+		}).length;
 	},
 	
 	"style": function(){
-		return $$('.added').setStyles({'background-color': '#ededed', 'color': '#fff'}).length;
+		return $$('div.added').setStyles({ 'background-color':'#ededed', color:'#fff' }).length;
 	},
 	
-	"confirm-added" : function(){
+	"confirm-added": function(){
 		return $$('div.added').length;
 	},
 	
@@ -106,30 +102,31 @@ window.tests = {
 		return $$('div').set('html', "<p>new content</p>").length;
 	},
 	
-	"sethtml-alt" : function(){
+	"sethtml-alt": function(){
 		return $$('div.odd').filter(function(div,i){
 			if (i % 50 === 1) return div.set('html', "<p>alt content</p>");
 		}).length;
 	},
 	
-	"insertbefore" : function(){
-		return $$('.fromcode a').map(function(a){
+	"insertbefore": function(){
+		return $$('ul.fromcode a').map(function(a){
 			new Element('p', {html: 'A Link'}).injectBefore(a);
 		}).length;
 	},
 	
-	"insertafter" : function(){
-		return $$('.fromcode a').map(function(a){
+	"insertafter": function(){
+		return $$('ul.fromcode a').map(function(a){
 			new Element('p', {html: 'A Link'}).injectAfter(a);
 		}).length;
 	},
 	
 	destroy: function(){ 
-		return $$('.fromcode').dispose().length;
+		return $$('ul.fromcode').dispose().length;
 	},
 	
 	finale: function(){
-		return $$('body *').dispose().length;
+		$$('body *').dispose();
+		return $$('body *').length;
 	}
 	
 }
