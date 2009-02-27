@@ -29,9 +29,11 @@ window.tests = {
 	},
 	
 	"attr" : function(){
-		return $$('ul').map(function(el){
-			return el.id ? el.id : null;
-		}).length;
+		return $$('ul').get('id').length;
+		
+		// return $$('ul').map(function(el){
+		// 	return el.id ? el.id : null;
+		// }).length;
 	},
 	
 	"bindattr" : function(){
