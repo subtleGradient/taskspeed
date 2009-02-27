@@ -223,7 +223,16 @@ tbody td.showcode:hover a.code pre {
 	-webkit-box-shadow: 0px 2px 10px #000;
 }
 
-tbody td.showcode a.code pre{display:block;}
+tbody td.showcode a.code pre{
+	display:block;
+	width: 300px;
+	white-space: pre-wrap;       /* css-3 */
+	white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+	white-space: -pre-wrap;      /* Opera 4-6 */
+	white-space: -o-pre-wrap;    /* Opera 7 */
+	word-wrap: break-word;       /* Internet Explorer 5.5+ */
+	overflow: auto;	
+}
 /*td:hover a.code pre{display:block;}*/
 
 tbody td:first-of-type a.code pre{

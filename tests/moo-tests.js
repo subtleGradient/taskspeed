@@ -120,11 +120,11 @@ window.tests = {
 		}).length;
 	},
 	
-	destroy: function(){ 
+	"destroy": function(){ 
 		return $$('ul.fromcode').dispose().length;
 	},
 	
-	finale: function(){
+	"finale": function(){
 		$$('body *').dispose();
 		return $$('body *').length;
 	}
