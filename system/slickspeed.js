@@ -107,7 +107,7 @@ window.onload = function(){
 		scores[test.name].innerHTML =  '&nbsp;' + score[test.name] + '&nbsp;';
 		
 		if (test.cell == test.row.lastChild) colourRow(test.row);
-		timer = setTimeout(testRunner, 25);
+		timer = setTimeout(testRunner, 125);
 	};
 	
 	var colourRow = function(row){
