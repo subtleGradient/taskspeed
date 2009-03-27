@@ -72,11 +72,38 @@ window.onload = function(){
 		}
 	});
 	
+	var submitTest = function(data){
+		
+		var pay = {};
+		pay.scores = {};
+		for(var i in data){
+			pay.scores[i] = data[i].innerHTML.match(/[0-9]+/)[0];
+		}
+		pay.ua = navigator.userAgent;
+		
+		var s = document.createElement('script');
+		s.src = "frameworks/dojo-130.js";
+		var h = document.getElementsByTagName("head")[0];
+		s.onload = s.onreadystatechange = function(e){
+			if(e.type == "load" || e.type.match(/loaded|complete/)){
+				dojo.xhrPost({ 
+					url:"report.php",
+					content: { data: dojo.toJson(pay) }
+				});
+			}
+		}
+		h.appendChild(s);
+		console.dir(pay);
+	}
+	
 	var timer = null;
 	
 	var testRunner = function(){
 		var test = tests.shift();
-		if (!test) return;
+		if(!test){ 
+			submitTest(scores);
+			return;
+		}
 		var results = test.execute(test.selector);
 		test.cell.className = 'test';
 		test.cell.innerHTML = '<b>'+results.time + ' ms</b><b>' + results.found + ' found</b>';
