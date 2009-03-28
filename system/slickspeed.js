@@ -74,18 +74,20 @@ window.onload = function(){
 	
 	var submitTest = function(data){
 		
-		var pay = {};
-		pay.scores = {};
+		if(!data || !confirm("Yo! Click OK to send the results back for charting")){
+			return;
+		}
+
+		var pay = { scores:{}, ua:navigator.userAgent };
 		for(var i in data){
 			pay.scores[i] = data[i].innerHTML.match(/[0-9]+/)[0];
 		}
-		pay.ua = navigator.userAgent;
 		
 		var s = document.createElement('script');
 		s.src = "frameworks/dojo-130.js";
 		var h = document.getElementsByTagName("head")[0];
 		s.onload = s.onreadystatechange = function(e){
-			if(e.type == "load" || e.type.match(/loaded|complete/)){
+			if((e && e.type == "load") || /loaded|complete/.test(s.readyState)){
 				dojo.xhrPost({ 
 					url:"report.php",
 					content: { data: dojo.toJson(pay) }
@@ -93,7 +95,6 @@ window.onload = function(){
 			}
 		}
 		h.appendChild(s);
-		console.dir(pay);
 	}
 	
 	var timer = null;
