@@ -1,0 +1,374 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+	
+	<title>TaskSpeed reports via dojox.charting</title>
+
+	<style type='text/css'>
+		body { 
+			margin:0.5em;
+		}
+		#message {
+			font:12pt Arial;
+			color:#666;
+			float:right;
+		}
+		.chart {
+			height:250px;
+			width:500px;
+		}
+		.tchart {
+			height:350px;
+			width:500px;
+		}
+		
+		#librarycharts,
+		#supermeta {
+			height:600px;
+		}
+		#container {
+			margin:0 auto;
+		}
+		
+		.fit,
+		#masterChart, 
+		#byBrowser {
+			margin:0 auto; width:800px;
+		}
+		
+		#masterChartHolder {
+			width:700px;
+			height:500px;
+		}
+	</style>
+
+	<!-- load Dojo -->
+	<script src="http://o.aolcdn.com/dojo/1.3/dojo/dojo.xd.js"></script>
+	<script src="http://o.aolcdn.com/dojo/1.3/dijit/dijit.xd.js"></script>
+	<!-- a custom charting layer -->
+	<script src="charting.xd.js"></script>
+	
+	<script type="text/javascript">
+		dojo.require("dojox.gfx");
+		dojo.require("dojox.charting.Chart2D");
+		dojo.require("dojox.charting.widget.Legend");
+	
+		// an array of all chart instances made (to render later)
+		var allCharts = [], allLibCharts = [];
+		
+		// a config to be delgated into all charts
+		var yAxisConfig = {
+			vertical: true,	 // this is the vertical axis
+			fixLower: "none", // don't make space at the bottom
+			fixUpper: "none", // ...or the top of the graph
+			natural: true,
+			majorTickStep: 1, // show all the labels
+			htmlLabels: true, // and use HTML to do it so we get the right fonts and such
+			majorTick: { length: 0 }, // and squelch those unsightly tick marks
+			minorTick: { length: 0 }, // and squelch those unsightly tick marks
+			includeZero: false
+		};
+		
+		var thermalFill = { 
+			fill: {
+				// the "thermal" gradient
+				type: "linear",
+				x1: 0, y1: 0,
+				x2: 420, y2: 0,
+				colors: [
+					{ offset: 0.1, color:"green" },
+					{ offset: 0.66, color: "yellow" },
+					{ offset: 1, color: "red" }
+				]
+			},
+			stroke:{
+				color:"#000", size:1
+			}
+		};
+		
+		// a unified way to reduce the keys to a string usable as an id
+		var getId = function(str){
+			return str.replace(/[\ \.]/g, "").match(/[a-zA-Z0-9]+/)[0].toLowerCase();
+		};
+	
+		// redundant loading stuff:
+		var setMessage = function(m){
+			dojo.byId("message").innerHTML = m;
+		};
+		
+		// the main function. fired as a load: callback to the data fetching exercise
+		var makeCharts = function(data){
+
+			// define a new theme based on our color group
+			var DarkHorse = new dojox.charting.Theme({
+				chart: { fill: "transparent" },
+				plotarea: { fill: "transparent" },
+				axis: {
+					stroke: { //	  the axis itself
+						color: "#000", width: 1
+					},
+					fontColor: "#666",
+					font: "normal normal normal 11px HelveticaNeue-Light",
+					fill: "#a9a9a9"
+				},
+				colors: [
+					"#e28741", "#c6691c",
+					"#467299", "#2a547a",
+					"#f6c54c", "#d8a62d",
+					"#ff3f20","#c92719",
+					"#44aa77","#339966", "#246d49",
+					"#dd0000","#990000", "#6d0000",
+					"#669933" // memory
+				]
+			});
+
+			setMessage("Generating Charts");
+			
+			// determine if someone passed an exclude="" param to use
+			var ex = dojo.queryToObject(window.location.search.replace(/\?/,"")),
+				exclude = (ex && ex.exclude) ? ex.exclude.split("+") : [];
+									
+			// create the main chart 
+			var metaChart = new dojox.charting.Chart2D("masterChartHolder");
+			metaChart.setTheme(DarkHorse);
+			metaChart.addPlot("default", { type:"Bars", gap: 5 });
+
+			// generate the labels/data set for the calculated averages
+			var avg = data.everything.averages,
+				s = [], 
+				l = []
+			;	
+			for(var i in avg){
+				if(dojo.indexOf(exclude, getId(i)) >= 0) continue; 
+				s.push(avg[i]);
+				l.push({ text: i, value: s.length });
+			}
+
+			// setup flow for the metachart
+			metaChart.addAxis("y", dojo.delegate(yAxisConfig, {
+				major:50,
+				minor:25,
+				labels: l
+			}));
+			metaChart.addAxis("x", {
+				fixLower: "major", 
+				major: 1, minor:1, 
+				fixUpper: "major", 
+				natural: true,
+				includeZero:false
+			});
+
+			// only has one series of data, from above. 
+			metaChart.addSeries("byframework", s, { fill:"#2a547a", stroke: { color:"#000", width:1 } });
+
+			// make a master chart of each individual browser chart, so it scales
+			// uniformly. display separate from individuals.
+			var browserGroupChart = new dojox.charting.Chart2D("supermeta");
+			browserGroupChart.setTheme(DarkHorse);
+			browserGroupChart.addPlot("default", { type:"ClusteredColumns", gap: 5 });
+			browserGroupChart.addAxis("y", dojo.delegate(yAxisConfig, {
+				// we know the labels, because we know the libraries now.
+				labels: l, 
+				vertical:false, 
+				major:50, minor:50
+			}));
+			browserGroupChart.addAxis("x",{ 
+				fixUpper:"major", fixLower:"major",
+				vertical:true, major:1, minor:1,
+				natural:true, includeZero:false 
+			});
+
+			// make a master chart of each browser, to group individual library tests to scale
+			// (like browserGroupChart, but backwards)
+			var libraryGroupChart = new dojox.charting.Chart2D("librarycharts");
+			libraryGroupChart.setTheme(DarkHorse);
+			libraryGroupChart.addPlot("default", { type:"ClusteredColumns", gap: 5 });
+			libraryGroupChart.addAxis("x",{ 
+				fixUpper:"major", fixLower:"major", 
+				vertical:true, major:1, minor:1, 
+				natural:true, includeZero:false
+			});
+			
+			// iterate over the calculated per-browser tests for each library
+			var br = data.byBrowser,
+				libraries = data.everything.libraries,
+				browserLabels = []
+			;
+				
+			dojo.forEach(libraries, function(lib){
+				
+				var id = getId(lib);
+				if(dojo.indexOf(exclude, id) >= 0){ return; }
+				
+				// setup a chart holder for this library
+				var n = dojo.place("<div><h3>" + lib + "</h3><div class='tchart' id='" + id + "'></div></div>", "alllibrarycharts");		
+				
+				// make a chart for this library, by browser
+				var libchart = new dojox.charting.Chart2D(id);
+				libchart.setTheme(DarkHorse);	
+				libchart.addPlot("default", { type:"Bars", gap:2 });
+
+				// loop over the browsers we know, generating labels for the library
+				var ss = [], ll = [];
+				for(var i in br){
+					if(dojo.indexOf(exclude, getId(i)) >= 0) continue;
+					ss.push(br[i][lib].average);
+					ll.push({ text: i, value: ss.length });
+				}
+				browserLabels = ll; // stash this outside for libraryGroupChart
+
+				libchart.addAxis("y", {
+					fixLower: "major", fixUpper: "major", includeZero: false, major:50, minor:25
+				});
+				libchart.addAxis("x", dojo.delegate(yAxisConfig, {
+					labels: ll
+				}));
+
+				// we want to add each framework dataset to the group chart
+				libraryGroupChart.addSeries(id, ss);
+				
+				// the individual charts here have a "thermal" gradient
+				libchart.addSeries(id, ss, thermalFill);
+				
+				// push these to be rendered later
+				allLibCharts.push(libchart);
+				
+			});
+			
+			// know we know the browsers we want, add the labels to the libGroup
+			libraryGroupChart.addAxis("y", dojo.delegate(yAxisConfig, { 
+				vertical:false, labels:browserLabels 
+			}));
+			
+			// iterate over each of the browsers
+			for(var i in br){
+				
+				// build the id up from the browser version
+				var id = getId(i);
+				if(dojo.indexOf(exclude, id) >= 0){ continue; }
+
+				// put a region for this browser chart
+				var ba = dojo.place("<div><h4>" + i + "</h4><div class='chart' id='" + id + "'></div></div>", "byBrowser");
+
+				// build a chart for this browser data
+				var chart = new dojox.charting.Chart2D(id);
+				chart.addPlot("default", { type: "Bars", gap:2 });
+				
+				var series = [], labels = [];
+				for(var lib in br[i]){
+					if(dojo.indexOf(exclude, getId(lib)) >= 0) continue; 
+					series.push(br[i][lib].average);
+					labels.push({ text: lib, value: series.length });
+				}
+
+				// define the layout of the chart, and the labels
+				chart.addAxis("y", {
+					fixLower: "major", fixUpper: "major", 
+					includeZero: false, major:50, minor:25
+				});
+				chart.addAxis("x", dojo.delegate(yAxisConfig, {
+					labels: labels
+				}));
+
+				// add this browser's series of data to it's own chart
+				chart.addSeries(id, series, thermalFill);
+				
+				// add this browsers's series of data to the browser-scaled-chart
+				browserGroupChart.addSeries(id, series);
+				
+				// these charts are rendered first, but later.
+				allCharts.push(chart);
+			}
+			
+			// render the first two charts, and make one have a legend
+			metaChart.render();
+			browserGroupChart.render();
+			var groupLegend = new dojox.charting.widget.Legend({
+				chart: browserGroupChart
+			}, "supermetaLegend");
+
+			// now render all the plain charts
+			dojo.forEach(allCharts, function(c){  c.render(); });
+
+			// now set this last heavy chart into a new thread. it is on 
+			// the bottom of the page. 
+			setTimeout(function(){ 
+
+				libraryGroupChart.render(); 
+				var libraryLegend = new dojox.charting.widget.Legend({
+					chart: libraryGroupChart
+				}, "librarychartsLegend");
+				
+				// now render each individual library chart
+				dojo.forEach(allLibCharts, function(c){ c.render(); }); 
+				
+				setMessage("done.");
+				dojo.anim("message", { opacity:0 });
+				
+			}, 2000);
+
+		};
+
+		// when modules and dom is ready, start it off
+		dojo.addOnLoad(function(){
+			setMessage("Loading Data");
+			
+			// fetch the results, and make some charts:
+			dojo.xhrGet({
+				url:"results.json",
+				handleAs:"json",
+				load:makeCharts
+			});
+			
+		});
+	</script>
+
+</head>
+<body class="tundra">
+	<div id="container">
+		<div class='fit'>
+			<h1><span id="message"></span>TaskSpeed Reports</h1>
+			<p>
+				This information is auto-generated by the collected data 
+				from <a href="http://dante.dojotoolkit.org/taskspeed/">TaskSpeed</a>
+				using dojox.gfx
+			</p>
+		</div>
+
+		<div id="charts">
+			<div id='masterChart'>
+				<h2>Frameworks</h2>
+				<p>Totals Averaged across all browsers, all tests.</p>
+				<div id="masterChartHolder"></div>
+			</div>
+
+			<div class="fit">
+				<h2>All Library tests, to scale</h2>
+			</div>
+
+			<div id="librarycharts"></div>
+			<div id="librarychartsLegend"></div>
+					
+			<div class='fit'><h2>All Browser tests, to scale</h2></div>
+			<div id="supermeta"></div>
+			<div id="supermetaLegend"></div>
+			
+			<div id="byBrowser">
+				<h2>Browsers</h2>
+				<p>Averages per framework across all tests by browser.</p>
+			</div>
+			
+			<div class="fit" id="alllibrarycharts">
+				<h2>Libraries</h2>
+				<p>Breakdown of all available browser tests per library.</p>			
+			</div>
+			
+		</div>
+
+		<p class='fit'>
+			You can exclude any library or browsers results by passing an ?exclude= parameter to the url. The value is a "+" joined list of the id's as they happen to be. eg: to disable IE 8.0 and Firefox 2 add ?exclude=ie80+firefox20 ... The id's are generated based on a regexp and how php get_browser describes a particular useragent, or the library name stripped of all complex characters. eg: Dojo 1.3.0 -> dojo130
+		</p>
+		
+	</div>
+</body>
+</html>
