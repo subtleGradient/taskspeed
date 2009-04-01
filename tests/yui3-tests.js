@@ -15,11 +15,11 @@ window.tests = {
 	"indexof" : function(){
 		var target, item, index, i;
 		for ( i = 0; i < 20; i++ ) {
-			target = Y.get('#setid150');
 			item = 0;
 			index = 0;
+			target = Y.get('#setid150');
 			Y.all('ul').each(function(n){
-				if ( n === target ) {
+				if ( n.compareTo(target) ) {
 					index = item;
 				}
 				item ++;
@@ -29,9 +29,7 @@ window.tests = {
 	},
 	
 	"bind" : function(){
-		var nodes = Y.all('ul > li');
-		nodes.on('click', function(){});
-		return nodes.size();
+		return Y.all('ul > li').on('click', function(){}).length;
 	},
 	
 	"attr" : function(){
@@ -64,9 +62,7 @@ window.tests = {
 	},
 	
 	"addanchor" : function(){
-		var lis = Y.all('.fromcode > li');
-		lis.set('innerHTML', '<a href="http://example.com">link</a>')
-		return lis.size();
+		return Y.all('.fromcode > li').set('innerHTML', '<a href="http://example.com">link</a>').length;
 	},
 
 	"append" : function(){
@@ -102,9 +98,6 @@ window.tests = {
 	},
 	
 	"sethtml": function(){
-		// replace the content of all div elements with "<p>new content</p>"
-		//
-		// return the length of matched divs
 		return Y.all('div').set('innerHTML', '<p>new content</p>').length;
 	},
 	
@@ -117,22 +110,26 @@ window.tests = {
 	},
 	
 	"insertafter" : function(){
-		//	find all anchors in the class "fromcode" (.fromcode a)
-		//		add a <p> element in the dom after the matched anchors
-		//			- the content should equial "After Link"
-		//			
-		//	return the length of the found anchors.
+		return Y.all('.fromcode a').appendChild(Y.Node.create('<p>After Link</p>')).length;
 	},
 	
 	"destroy": function(){ 
-		// destroy all the nodes with the class "fromcode"
-		// return the length of the destroyed nodes
+		var nodes = Y.all('.fromcode');
+		nodes.each(function(node){
+			node.get('parentNode').removeChild(node);
+		});
+		return nodes.size();
 	},
 	
 	"finale": function(){
 		// empty the body element of all elements
 		//
 		// return the length of the query "body *"
+		var body = Y.get('body');
+		while ( body.get('firstChild') ) {
+			body.removeChild(body.get('firstChild'));
+		}
+		return Y.all('body *').size();
 	}
 	
 };
