@@ -86,7 +86,7 @@ window.tests = {
 		// return the lenght of the odd found divs
 		var divs = Y.all('div');
 		divs.addClass('added');
-		return divs.filter(':nth-child(2n+1)').addClass('odd').length;
+		return divs.filter(':nth-child(even)').addClass('odd').length;
 	},
 	
 	"style": function(){
