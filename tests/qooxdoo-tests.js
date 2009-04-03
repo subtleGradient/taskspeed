@@ -2,28 +2,28 @@ window.tests = {
 	
 	"make" : function(){
 		var Element = qx.bom.Element;
-    var Attribute = qx.bom.element.Attribute;
+		var Attribute = qx.bom.element.Attribute;
 
 		for (var i=0; i<250; i++)
 		{
-		  var el = Element.create("ul", {
-		    "class": "fromcode",
-		    "html" : "<li>one</li><li>two</li><li>three</li>",
-		    "id" : "setid" + i
-		  });
-		  document.body.appendChild(el);
+			var el = Element.create("ul", {
+				"class": "fromcode",
+				"html" : "<li>one</li><li>two</li><li>three</li>",
+				"id" : "setid" + i
+			});
+			document.body.appendChild(el);
 		}
 		return qx.bom.Selector.query("ul.fromcode").length;
 	},
 	
 	"indexof" : function(){  
-	  var Collection = qx.bom.Collection;
+		var Collection = qx.bom.Collection;
 		var Selector = qx.bom.Selector;
-		
-    for(var i = 0; i < 20; i++){
-      n = Collection.query("ul").indexOf( Selector.query("#setid150")[0] );
-    }
-    return n;		  
+		var n;
+		for(var i = 0; i < 20; i++){
+			n = Collection.query("ul").indexOf( Selector.query("#setid150")[0] );
+		}
+		return n;
 	},
 	
 	"bind" : function(){
@@ -43,10 +43,10 @@ window.tests = {
 		
 		var elements = qx.bom.Collection.query("ul > li");
 		for (var i=0; i<elements.length; i++) {
-		  var element = elements[i];
-		  Element.addListener(element, "mouseover", callback);
-		  Attribute.set(element, "rel", "touched");
-		  Element.removeListener(element, "mouseover", callback);
+			var element = elements[i];
+			Element.addListener(element, "mouseover", callback);
+			Attribute.set(element, "rel", "touched");
+			Element.removeListener(element, "mouseover", callback);
 		}
 		return elements.length;
 	},
@@ -58,10 +58,10 @@ window.tests = {
 		
 		for (var i=0; i<40; i++)
 		{
-		  var table = Element.create("table", { "class" : "madetable"});
-		  document.body.appendChild(table);
-		  Attribute.set(table, "html", "<tr><td>first</td></tr>");
-		  Collection.query("tr", table).prepend("<td>before</td>");
+			var table = Element.create("table", { "class" : "madetable"});
+			document.body.appendChild(table);
+			Attribute.set(table, "html", "<tr><td>first</td></tr>");
+			Collection.query("tr", table).prepend("<td>before</td>");
 		}
 		
 		return qx.bom.Selector.query("tr td").length;
@@ -72,24 +72,24 @@ window.tests = {
 	},
 
 	"append" : function(){
-    var Element = qx.bom.Element;
-    var Attribute = qx.bom.element.Attribute;
+		var Element = qx.bom.Element;
+		var Attribute = qx.bom.element.Attribute;
 
-    for (var i=0; i<500; i++)
-    {
-      var el = Element.create("div", {
-        "rel": "foo",
-        "text" : "test"
-      });
-      document.body.appendChild(el);
-    }
-    return qx.bom.Selector.query("[rel^='foo']").length;
+		for (var i=0; i<500; i++)
+		{
+			var el = Element.create("div", {
+				"rel": "foo",
+				"text" : "test"
+			});
+			document.body.appendChild(el);
+		}
+		return qx.bom.Selector.query("[rel^='foo']").length;
 	},
 	
 	"addclass-odd" : function(){
 		return qx.bom.Collection.query("div").addClass("added").filter(function(n, i) {
-      return i % 2 === 1
-    }).addClass("odd").length;
+			return i % 2 === 1
+		}).addClass("odd").length;
 	},
 	
 	"style": function(){
@@ -97,28 +97,28 @@ window.tests = {
 	},
 	
 	"removeclass": function(){
-	  return qx.bom.Collection.query(".added").removeClass("added").length;
+		return qx.bom.Collection.query(".added").removeClass("added").length;
 	},
 	
 	"sethtml": function(){
-	  return qx.bom.Collection.query("div").setAttribute("html", "<p>new content</p>").length;
+		return qx.bom.Collection.query("div").setAttribute("html", "<p>new content</p>").length;
 	},
 	
 	"insertbefore" : function(){
-	  return qx.bom.Collection.query(".fromcode a").before("<p>A Link</p>").length;
+		return qx.bom.Collection.query(".fromcode a").before("<p>A Link</p>").length;
 	},
 	
 	"insertafter" : function(){
-	  return qx.bom.Collection.query(".fromcode a").after("<p>After Link</p>").length;
+		return qx.bom.Collection.query(".fromcode a").after("<p>After Link</p>").length;
 	},
 	
 	"destroy": function(){ 
-	  return qx.bom.Collection.query(".fromcode").remove().length;
+		return qx.bom.Collection.query(".fromcode").remove().length;
 	},
 	
 	"finale": function(){
 		qx.bom.Element.empty(document.body);
-    return qx.bom.Selector.query("body *").length;
+		return qx.bom.Selector.query("body *").length;
 	}
 	
 };
