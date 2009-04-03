@@ -13,6 +13,7 @@ window.tests = {
 	},
 	
 	"indexof" : function(){
+		// can we do better here? This isn't pretty
 		var target, item, index, i;
 		for ( i = 0; i < 20; i++ ) {
 			item = 0;
@@ -29,7 +30,8 @@ window.tests = {
 	},
 	
 	"bind" : function(){
-		return Y.all('ul > li').on('click', function(){}).length;
+		var subscriber = function(){};
+		return Y.all('ul > li').on('click', subscriber).length;
 	},
 	
 	"attr" : function(){
@@ -37,20 +39,15 @@ window.tests = {
 	},
 	
 	"bindattr" : function(){
-		var nodes = Y.all('ul > li');
-		nodes.on('mouseover', function(){});
+		var nodes = Y.all('ul > li'),
+			subscriber = function(){};
+		nodes.on('mouseover', subscriber);
 		nodes.set('rel', 'touched');
 		nodes.detach('mouseover');
 		return nodes.size();
 	},
 
 	"table": function(){
-		// in a 40-iteration for loop:
-		//		create a table with the class "madetable", and append it to the DOM
-		//		add a row with one cell to the table. the cell content should be "first"
-		//		add a new cell before the first cell in the row.
-		//
-		//	return the length of the query "tr td"
 		var table, i;
 		for ( i = 0; i < 40; i++ ) {
 			table = Y.Node.create('<table class="madetable"></table>');
@@ -66,12 +63,7 @@ window.tests = {
 	},
 
 	"append" : function(){
-		//	in a 500 iteration loop:
-		//		create a new <div> with the same critera as 'create'
-		//			- NOTE: rel needs to be == "foo2"
-		//		then append to body element (no caching)
-		//		
-		//	return then length of the matches from the selector "div[rel^='foo2']" 
+		// Selector failing on "div[rel^='foo2']"
 		for ( var i = 0; i < 500; i++ ) {
 			Y.get('body').appendChild(Y.Node.create('<div rel="foo2"></div>'));
 		}
@@ -79,11 +71,7 @@ window.tests = {
 	},
 	
 	"addclass-odd" : function(){
-		// locate all div elements on the page
-		//	add the class "added" to those divs
-		//	add the class "odd" to the odd divs in the selection
-		//
-		// return the lenght of the odd found divs
+		// using ':nth-child(even)' because others start counting at 0
 		var divs = Y.all('div');
 		divs.addClass('added');
 		return divs.filter(':nth-child(even)').addClass('odd').length;
@@ -102,11 +90,6 @@ window.tests = {
 	},
 	
 	"insertbefore" : function(){
-		//	find all anchors in the class "fromcode" (.fromcode a)
-		//		add a <p> element in the dom before the matched anchors
-		//			- the content should equal "A Link"
-		//		
-		//	return the length of the found anchors.
 		return Y.all('.fromcode a').insertBefore(Y.Node.create('<p>A Link</p>')).length;
 	},
 	
@@ -123,14 +106,11 @@ window.tests = {
 	},
 	
 	"finale": function(){
-		// empty the body element of all elements
-		//
-		// return the length of the query "body *"
-		var body = Y.get('body');
-		while ( body.get('firstChild') ) {
-			body.removeChild(body.get('firstChild'));
-		}
-		return Y.all('body *').size();
+		var body = Y.get('body'),
+			nodes;
+		body.set('innerHTML', '');
+		nodes = Y.all('body *');
+		return (nodes ? nodes.size() : 0);
 	}
 	
 };

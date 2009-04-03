@@ -79,25 +79,25 @@ window.tests = {
 	},
 	
 	"addclass-odd" : function(){
-		var divs, odds;
-		divs = YAHOO.util.Selector.query('div');
+		// using ':nth-child(even)' because others start counting at 0
+		var divs = YAHOO.util.Selector.query('div'),
+			odds = YAHOO.util.Selector.filter(divs, ':nth-child(even)');
 		YAHOO.util.Dom.addClass(divs, 'added');
-		return YAHOO.util.Dom.batch(YAHOO.util.Selector.filter(divs, ':nth-child(even)'), function(div){
-			YAHOO.util.Dom.addClass(div, 'odd');
-		}).length;
+		YAHOO.util.Dom.addClass(odds, 'odd');
+		return odds.length;
 	},
 	
 	"style": function(){
-		return YAHOO.util.Dom.batch(YAHOO.util.Selector.query('.added'), function(n){
-			YAHOO.util.Dom.setStyle(n, 'background-color', '#ededed');
-			YAHOO.util.Dom.setStyle(n, 'color', '#fff');
-		}).length;
+		var nodes = YAHOO.util.Dom.getElementsByClassName('added');
+        YAHOO.util.Dom.setStyle(nodes, 'background-color', '#ededed');
+        YAHOO.util.Dom.setStyle(nodes, 'color', '#fff');
+		return nodes.length;
 	},
 	
 	"removeclass": function(){
-		return YAHOO.util.Dom.batch(YAHOO.util.Selector.query('.added'), function(n) {
-			YAHOO.util.Dom.removeClass(n, 'added');
-		}).length;
+		var nodes = YAHOO.util.Dom.getElementsByClassName('added');
+		YAHOO.util.Dom.removeClass(nodes, 'added');
+		return nodes.length;
 	},
 	
 	"sethtml": function(){
@@ -129,8 +129,7 @@ window.tests = {
 	},
 	
 	"finale": function(){
-		// Same as other library's empty methods
-		document.body.innerHTML = '';
+		document.body.innerHTML = ''; // Same as other library's empty methods
 		return YAHOO.util.Selector.query('body *').length;
 	}
 	
