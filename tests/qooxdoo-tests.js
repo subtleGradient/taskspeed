@@ -87,7 +87,7 @@ window.tests = {
 	},
 	
 	"addclass-odd" : function(){
-		return qx.bom.Collection.query("div").addClass("added").filter(function(n,i) {
+		return qx.bom.Collection.query("div").addClass("added").filter(function(n, i) {
       return i % 2 === 1
     }).addClass("odd").length;
 	},
