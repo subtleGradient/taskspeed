@@ -43,7 +43,7 @@ window.tests = {
 			subscriber = function(){};
 		nodes.on('mouseover', subscriber);
 		nodes.set('rel', 'touched');
-		nodes.detach('mouseover');
+		nodes.detach('mouseover', subscriber);
 		return nodes.size();
 	},
 
@@ -72,9 +72,17 @@ window.tests = {
 	
 	"addclass-odd" : function(){
 		// using ':nth-child(even)' because others start counting at 0
-		var divs = Y.all('div');
+		var divs = Y.all('div'),
+			odds = [],
+			i = 0;
 		divs.addClass('added');
-		return divs.filter(':nth-child(even)').addClass('odd').length;
+		divs.each(function(div){
+			if ( i % 2 === 1 ) {
+				odds.push(div.addClass('odd'));
+			}
+			i++;
+		});
+		return odds.length;
 	},
 	
 	"style": function(){

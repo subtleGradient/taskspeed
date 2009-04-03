@@ -14,12 +14,12 @@ window.tests = {
 	
 	"indexof" : function(){
 		// @TODO this is ugly :-o
-		var target, uls, index;
-		for ( var i = 0; i < 20; i++ ) {
+		var target, uls, index, i, j, len;
+		for ( i = 0; i < 20; i++ ) {
 			target = YAHOO.util.Dom.get('setid150');
 			uls = YAHOO.util.Selector.query('ul');
 			index = 0;
-			for ( var j = 0; j < uls.length; j++ ) {
+			for ( j = 0, len = uls.length; j < len; j++ ) {
 				if ( uls[j] === target ) {
 					index = j;
 					break;
@@ -31,7 +31,7 @@ window.tests = {
 	
 	"bind" : function(){
 		var lis = YAHOO.util.Selector.query('ul > li');
-		YAHOO.util.Event.addListener(lis, 'click', function(){});
+		YAHOO.util.Event.on(lis, 'click', function(){});
 		return lis.length;
 	},
 	
@@ -42,22 +42,25 @@ window.tests = {
 	},
 	
 	"bindattr" : function(){
-		// @TODO See if we can speed this one up
-		var lis = YAHOO.util.Selector.query('ul > li');
-		YAHOO.util.Event.addListener(lis, 'mouseover', function(){});
-		YAHOO.util.Dom.batch(lis, function(li){ YAHOO.util.Dom.setAttribute(li, 'rel', 'touched'); });
-		YAHOO.util.Event.removeListener(lis, 'mouseover');
-		return lis.length;
+		var lis = YAHOO.util.Selector.query('ul > li'),
+			subscriber = function(){};
+		return YAHOO.util.Dom.batch(lis, function(li){
+			YAHOO.util.Event.on(li, 'mouseover', subscriber);
+			YAHOO.util.Dom.setAttribute(li, 'rel', 'touched');
+			YAHOO.util.Event.removeListener(li, 'mouseover', subscriber);
+		}).length;
 	},
 
 	"table": function(){
-		var table;
-		for ( var i = 0; i < 40; i++ ) {
-			table = document.createElement('table');
-			YAHOO.util.Dom.addClass(table, 'madetable');
+		var _, table, i;
+		for ( i = 0; i < 40; i++ ) {
+            _ = document.createElement('div');
+            _.innerHTML = '<table class="madetable"><tbody><tr><td>first</td></tr></tbody></table>';
+			table = _.getElementsByTagName('table')[0];
 			document.body.appendChild(table);
-			table.innerHTML = '<tr><td>first</td></tr>';
-			YAHOO.util.Dom.insertBefore(document.createElement('td'), YAHOO.util.Selector.query('td', table, true));
+			YAHOO.util.Dom.insertBefore(
+                document.createElement('td'),
+                table.getElementsByTagName('td')[0]);
 		}
 		return YAHOO.util.Selector.query('tr td').length;
 	},
@@ -79,10 +82,15 @@ window.tests = {
 	},
 	
 	"addclass-odd" : function(){
-		// using ':nth-child(even)' because others start counting at 0
 		var divs = YAHOO.util.Selector.query('div'),
-			odds = YAHOO.util.Selector.filter(divs, ':nth-child(even)');
+			odds = [],
+			i;
 		YAHOO.util.Dom.addClass(divs, 'added');
+		for ( i = 0; i < divs.length; i++ ) { // like dojo 1.3
+			if ( i % 2 === 1 ) {
+				odds.push(divs[i]);
+			}
+		}
 		YAHOO.util.Dom.addClass(odds, 'odd');
 		return odds.length;
 	},
