@@ -107,6 +107,7 @@ window.tests = {
 		//			- the content should equal "A Link"
 		//		
 		//	return the length of the found anchors.
+		return Y.all('.fromcode a').insertBefore(Y.Node.create('<p>A Link</p>')).size();
 	},
 	
 	"insertafter" : function(){
