@@ -20,7 +20,7 @@ qx.$$locales = {"C": {"cldr_date_format_long": "MMMM d, yyyy", "cldr_time_format
 
 qx.$$loader = {
   parts : {"boot":[0]},
-  uris : [["./qooxdoo-082-0.js"]],
+  uris : [["./qooxdoo-083-pre-0.js"]],
   boot : "boot"
 };  
 
