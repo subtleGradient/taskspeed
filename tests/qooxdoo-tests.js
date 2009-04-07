@@ -58,8 +58,7 @@ window.tests = {
 		
 		for (var i=0; i<40; i++)
 		{
-		  var table = Collection.html('<table class="madetable"></table>');
-		  document.body.appendChild(table[0]);
+		  var table = Collection.html('<table class="madetable"></table>').appendTo("body");
 		  
 		  table.append("<tr><td>first</td></tr>")
 		    .find("tr")
