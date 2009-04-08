@@ -1,7 +1,7 @@
 // TaskSpeed, the DOM way by WebReflection
 window.tests = {
 
-	"make": function(){
+    "make": function(){
         for(var
             body = document.body,
             ul = document.createElement("ul"),
@@ -18,16 +18,16 @@ window.tests = {
             fromcode.appendChild(li.cloneNode(true)).appendChild(document.createTextNode("three"));
             body.appendChild(fromcode);
         };
-        return  $.getSimple.call(body, ".fromcode").length;
-	},
-	
-	"indexof" : function(){
+        return  $.getSimple.call(body, "ul.fromcode").length;
+    },
+
+    "indexof" : function(){
         for(var body = document.body, index = -1, i = 0; i < 20; ++i)
             index   = $.indexOf.call(body.getElementsByTagName("ul"), document.getElementById("setid150"));
         return  index;
-	},
-	
-	"bind" : function(){
+    },
+
+    "bind" : function(){
         for(var callback = function(){}, li = document.body.getElementsByTagName("li"), length = li.length, i = 0, total = 0, node; i < length; ++i){
             node = li[i];
             if(node.parentNode.nodeName == "UL"){
@@ -36,15 +36,15 @@ window.tests = {
             };
         };
         return  total;
-	},
-	
-	"attr" : function(){
+    },
+
+    "attr" : function(){
         for(var result = [], ul = document.body.getElementsByTagName("ul"), length = ul.length, i = 0; i < length; ++i)
             result[i] = ul[i].id;
-		return  result.length;
-	},
-	
-	"bindattr" : function(){
+        return  result.length;
+    },
+
+    "bindattr" : function(){
         for(var callback = function(){}, li = document.body.getElementsByTagName("li"), length = li.length, i = 0, total = 0, node; i < length; ++i){
             node = li[i];
             if(node.parentNode.nodeName == "UL"){
@@ -55,9 +55,9 @@ window.tests = {
             };
         };
         return  total;
-	},
+    },
 
-	"table": function(){
+    "table": function(){
         for(var
             body    = document.body,
             table   = document.createElement("table").appendChild(document.createElement("tbody")).parentNode,
@@ -80,14 +80,14 @@ window.tests = {
         i = 0;
         for(var total = 0; i < length; ++i)
             total += tr[i].getElementsByTagName("td").length;
-		return  total;
-	},
-	
-	"addanchor" : function(){
+        return  total;
+    },
+
+    "addanchor" : function(){
         var a = document.createElement("a");
         a.setAttribute("href", "http://example.com");
         a.appendChild(document.createTextNode("link"));
-        for(var ul = $.getSimple.call(document.body, ".fromcode"), length = ul.length, i = 0, total = 0, childNodes, j, len, node; i < length; ++i){
+        for(var ul = $.getSimple.call(document.body, "ul.fromcode"), length = ul.length, i = 0, total = 0, childNodes, j, len, node; i < length; ++i){
             childNodes = ul[i].childNodes;
             j   = 0;
             len = childNodes.length;
@@ -101,9 +101,9 @@ window.tests = {
             };
         };
         return  total;
-	},
-	
-	"append": function(){
+    },
+
+    "append": function(){
         for(var div = document.createElement("div"), body = document.body, i = 0, node; i < 500; ++i){
             node = div.cloneNode(true);
             node.setAttribute("rel", "foo2");
@@ -112,61 +112,61 @@ window.tests = {
         for(var div = body.getElementsByTagName("div"), length = div.length, i = 0, total = 0; i < length; ++i)
             total += div[i].getAttribute("rel") === "foo2";
         return  total;
-	},
-		
-	"addclass-odd" : function(){
+    },
+
+    "addclass-odd" : function(){
         for(var div = document.body.getElementsByTagName("div"), length = div.length, i = 0, total = 0; i < length; ++i)
             total += i % 2 ? !!(div[i].className += " added odd") : !(div[i].className += " added");
         return  total;
-	},
-	
-	"style" : function(){
-        for(var div = $.getSimple.call(document.body, ".added"), length = div.length, i = 0, style; i < length; ++i){
+    },
+
+    "style" : function(){
+        for(var div = $.getSimple.call(document.body, "div.added"), length = div.length, i = 0, style; i < length; ++i){
             style = div[i].style;
             style.backgroundColor = "#ededed";
             style.color = "#fff";
         };
         return  length;
-	},
+    },
 
-	"removeclass" : function(){
-        for(var re = /\s*\badded\b/g, div = $.getSimple.call(document.body, ".added"), length = div.length, i = 0, node; i < length; ++i){
+    "removeclass" : function(){
+        for(var re = /\s*\badded\b/g, div = $.getSimple.call(document.body, "div.added"), length = div.length, i = 0, node; i < length; ++i){
             node = div[i];
             node.className = node.className.replace(re, "");
         };
         return  length;
-	},
-	
-	"sethtml": function(){
+    },
+
+    "sethtml": function(){
         for(var div = document.body.getElementsByTagName("div"), length = div.length, i = 0; i < length; ++i)
             div.innerHTML = "<p>new content</p>";
         return  div.length;
-	},
-	
-	"insertbefore" : function(){
-        for(var p = document.createElement("p"), ul = $.getSimple.call(document.body, ".fromcode"), length = ul.length, i = 0, total = 0; i < length; ++i){
+    },
+
+    "insertbefore" : function(){
+        for(var p = document.createElement("p"), ul = $.getSimple.call(document.body, "ul.fromcode"), length = ul.length, i = 0, total = 0; i < length; ++i){
             for(var a = ul[i].getElementsByTagName("a"), len = a.length, j = 0, node; j < len; ++j){
                 ++total;
                 node    = a[j];
                 node.parentNode.insertBefore(p.cloneNode(true).appendChild(document.createTextNode("A Link")).parentNode, node);
             };                
         };
-		return  total;
-	},
-	
-	"insertafter" : function(){
-        for(var p = document.createElement("p"), ul = $.getSimple.call(document.body, ".fromcode"), length = ul.length, i = 0, total = 0; i < length; ++i){
+        return  total;
+    },
+
+    "insertafter" : function(){
+        for(var p = document.createElement("p"), ul = $.getSimple.call(document.body, "ul.fromcode"), length = ul.length, i = 0, total = 0; i < length; ++i){
             for(var a = ul[i].getElementsByTagName("a"), len = a.length, j = 0, node; j < len; ++j){
                 ++total;
                 node    = a[j];
                 node.parentNode.appendChild(p.cloneNode(true).appendChild(document.createTextNode("After Link")).parentNode);
             };                
         };
-		return  total;
-	},
-	
-	"destroy": function(){
-        var result  = $.getSimple.call(document.body, ".fromcode"),
+        return  total;
+    },
+
+    "destroy": function(){
+        var result  = $.getSimple.call(document.body, "ul.fromcode"),
             length  = result.length,
             i       = 0,
             node;
@@ -174,14 +174,14 @@ window.tests = {
             node = result[i++];
             node.parentNode.removeChild(node);
         };
-		return  length;
-	},
-	
-	"finale": function(){
+        return  length;
+    },
+
+    "finale": function(){
         var body = document.body;
         while(body.firstChild)
             body.removeChild(body.firstChild);
-		return  body.getElementsByTagName("*").length;
-	}
-	
+        return  body.getElementsByTagName("*").length;
+    }
+
 };
