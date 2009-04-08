@@ -40,6 +40,33 @@
 			width:700px;
 			height:500px;
 		}
+		#excluder {
+			position:fixed;
+			#position:absolute;
+			right:5px;
+			top:5px;
+			width:145px;
+			font-size:80%;
+			z-index:999;
+		}
+		#excluder button {
+			width:98%;
+			cursor:pointer;
+			border:1px solid #666;
+			background:#fefefe;
+		}
+		#excluder button:hover {
+			background:#666;
+			color:#fefefe;
+		}
+		#excluder fieldset {
+			margin-top:5px;
+			background:#fefefe;
+			border:1px solid #666;
+		}
+		#excluder fieldset legend {
+			cursor:pointer;
+		}
 	</style>
 
 	<!-- load Dojo -->
@@ -52,6 +79,10 @@
 		dojo.require("dojox.gfx");
 		dojo.require("dojox.charting.Chart2D");
 		dojo.require("dojox.charting.widget.Legend");
+
+		// determine if someone passed an exclude="" param to use
+		var ex = dojo.queryToObject(window.location.search.replace(/\?/,"")),
+			exclude = (ex && ex.exclude) ? ex.exclude.split("+") : [];
 	
 		// an array of all chart instances made (to render later)
 		var allCharts = [], allLibCharts = [];
@@ -96,6 +127,16 @@
 			dojo.byId("message").innerHTML = m;
 		};
 		
+		var addCheck = function(which, id, checked){
+			// add a checkbox for `id` under `which` fieldset. force checked with `checked`
+			dojo.place(
+				"<div><input value='" + id + "' type='checkbox' " + 
+				(checked ? " checked='checked' " : "") +
+				"id='ex" + id + "'> <label for='ex" + id + "'>" + id + "</label>" +
+				"</div>",
+			which);
+		}
+		
 		// the main function. fired as a load: callback to the data fetching exercise
 		var makeCharts = function(data){
 
@@ -123,11 +164,7 @@
 			});
 
 			setMessage("Generating Charts");
-			
-			// determine if someone passed an exclude="" param to use
-			var ex = dojo.queryToObject(window.location.search.replace(/\?/,"")),
-				exclude = (ex && ex.exclude) ? ex.exclude.split("+") : [];
-									
+												
 			// create the main chart 
 			var metaChart = new dojox.charting.Chart2D("masterChartHolder");
 			metaChart.setTheme(DarkHorse);
@@ -197,8 +234,9 @@
 				
 			dojo.forEach(libraries, function(lib){
 				
-				var id = getId(lib);
-				if(dojo.indexOf(exclude, id) >= 0){ return; }
+				var id = getId(lib), _ex = dojo.indexOf(exclude, id) >= 0;
+				addCheck("libsBox", id, _ex);
+				if(_ex){ return; }
 				
 				// setup a chart holder for this library
 				var n = dojo.place("<div><h3>" + lib + "</h3><div class='tchart' id='" + id + "'></div></div>", "alllibrarycharts");		
@@ -218,7 +256,7 @@
 				browserLabels = ll; // stash this outside for libraryGroupChart
 
 				libchart.addAxis("y", {
-					fixLower: "major", fixUpper: "major", includeZero: false, major:50, minor:25
+					fixLower: "major", fixUpper: "major", fixLower:"major", includeZero: false, major:1, minor:1
 				});
 				libchart.addAxis("x", dojo.delegate(yAxisConfig, {
 					labels: ll
@@ -244,8 +282,9 @@
 			for(var i in br){
 				
 				// build the id up from the browser version
-				var id = getId(i);
-				if(dojo.indexOf(exclude, id) >= 0){ continue; }
+				var id = getId(i), _ex = dojo.indexOf(exclude, id) >= 0;
+				addCheck("browsersBox", id, _ex);
+				if(_ex){ continue; }
 
 				// put a region for this browser chart
 				var ba = dojo.place("<div><h4>" + i + "</h4><div class='chart' id='" + id + "'></div></div>", "byBrowser");
@@ -263,8 +302,7 @@
 
 				// define the layout of the chart, and the labels
 				chart.addAxis("y", {
-					fixLower: "major", fixUpper: "major", 
-					includeZero: false, major:50, minor:25
+					fixUpper: "major", fixLower:"major", includeZero: true, major:1, minor:0
 				});
 				chart.addAxis("x", dojo.delegate(yAxisConfig, {
 					labels: labels
@@ -308,9 +346,60 @@
 			}, 500);
 
 		};
+		
+		var getForm = function(){
+			// get a list of checked boxes to build up the exclude string
+			window.location.search = "?exclude=" + 
+				dojo.query("#excluder input")
+					.filter(function(n){ return n.checked; })
+					.map(function(n){ return n.value; })
+					.join("+");
+		}
+
+		dojo.extend(dojo.NodeList, {
+			SlideTitles: function(){ 
+				return this.forEach(function(n){
+					var open = true, t = dojo.query("> div", n)[0];
+					dojo.query("legend", n)
+						.onclick(function(e){
+							dojo.fx[(open ? "wipeOut" : "wipeIn")]({
+								node: t
+							}).play();
+							open = !open;
+						})
+					;
+				});
+			}, 
+			fixed: function(){
+				return dojo.isIE < 7 ? this.forEach(function(n){
+					var pos = dojo.coords(n, true),
+						timer;
+				
+					dojo.connect(window, "onscroll", function(el){
+						if(timer){
+							clearTimeout(timer); delete timer;
+						}
+						timer = setTimeout(function(){
+							dojo.anim(n, { "top" : dojo._docScroll().y + pos.y });	
+						}, 175);
+					})
+				}) : this;
+			}
+		});
+		
 
 		// when modules and dom is ready, start it off
 		dojo.addOnLoad(function(){
+					
+			// disable the form, handle the exclude url'age onclick:
+			dojo.query("#excluder form").onsubmit(function(e){
+				e.preventDefault();
+				getForm();
+			});
+			
+			dojo.query("#excluder").fixed().query("fieldset").SlideTitles();
+			
+			
 			setMessage("Loading Data");
 			
 			// fetch the results, and make some charts:
@@ -335,6 +424,20 @@
 			</p>
 		</div>
 
+		<div id="excluder">
+			<form action="charts.html" method="get">
+				<button type="submit">Reload Charts</button>
+				<fieldset>
+					<legend>Exclude Library:</legend>
+					<div id="libsBox"></div>
+				</fieldset>
+				<fieldset>
+					<legend>Exclude Browser:</legend>
+					<div id="browsersBox"></div>
+				</fieldset>
+			</form>
+		</div>
+		
 		<div id="charts">
 			<div id='masterChart'>
 				<h2>Frameworks</h2>
