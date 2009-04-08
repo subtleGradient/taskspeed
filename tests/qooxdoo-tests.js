@@ -58,10 +58,12 @@ window.tests = {
 		
 		for (var i=0; i<40; i++)
 		{
-			var table = Element.create("table", { "class" : "madetable"});
-			document.body.appendChild(table);
-			Attribute.set(table, "html", "<tr><td>first</td></tr>");
-			Collection.query("tr", table).prepend("<td>before</td>");
+		  var table = Collection.html('<table class="madetable"></table>');
+		  document.body.appendChild(table[0]);
+		  
+		  table.append("<tr><td>first</td></tr>")
+		    .find("tr")
+		    .prepend("<td>before</td>")
 		}
 		
 		return qx.bom.Selector.query("tr td").length;
