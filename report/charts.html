@@ -192,7 +192,8 @@
 				major: 1, minor:1, 
 				fixUpper: "major", 
 				natural: true,
-				includeZero:false
+				includeZero:false,
+				min:0
 			});
 
 			// only has one series of data, from above. 
@@ -256,7 +257,8 @@
 				browserLabels = ll; // stash this outside for libraryGroupChart
 
 				libchart.addAxis("y", {
-					fixLower: "major", fixUpper: "major", fixLower:"major", includeZero: false, major:1, minor:1
+					fixLower: "major", fixUpper: "major", fixLower:"major", 
+					includeZero: false, major:1, minor:1, min:0
 				});
 				libchart.addAxis("x", dojo.delegate(yAxisConfig, {
 					labels: ll
@@ -302,7 +304,7 @@
 
 				// define the layout of the chart, and the labels
 				chart.addAxis("y", {
-					fixUpper: "major", fixLower:"major", includeZero: true, major:1, minor:0
+					fixUpper: "major", fixLower:"major", includeZero: true, major:1, minor:0, min:0
 				});
 				chart.addAxis("x", dojo.delegate(yAxisConfig, {
 					labels: labels
