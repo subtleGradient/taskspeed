@@ -13,7 +13,7 @@ window.tests = {
 	},
 	
 	"indexof" : function(){
-		// @TODO this is ugly :-o
+		// No indexof method for arrays in YUI
 		var target, uls, index, i, j, len;
 		for ( i = 0; i < 20; i++ ) {
 			target = YAHOO.util.Dom.get('setid150');
@@ -52,6 +52,7 @@ window.tests = {
 	},
 
 	"table": function(){
+		// Making sure to help IE with DOM manipulation wrt tables
 		var _, table, i;
 		for ( i = 0; i < 40; i++ ) {
             _ = document.createElement('div');
@@ -83,6 +84,7 @@ window.tests = {
 	
 	"addclass-odd" : function(){
 		var divs = YAHOO.util.Selector.query('div'),
+			// odds = YAHOO.util.Selector.filter(divs, ':nth-child(even)'),
 			odds = [],
 			i;
 		YAHOO.util.Dom.addClass(divs, 'added');
