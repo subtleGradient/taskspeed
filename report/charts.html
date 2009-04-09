@@ -67,6 +67,20 @@
 		#excluder fieldset legend {
 			cursor:pointer;
 		}
+		
+		#excluder .icon {
+			padding:0; margin:0;
+			display:inline-block;
+			width:16px;
+			height:16px;
+			background:url('http://o.aolcdn.com/dojo/1.3.0/dijit/themes/tundra/images/treeExpand_minus.gif') no-repeat center center;
+		}
+		#excluder .open .icon {
+			background-image:url('http://o.aolcdn.com/dojo/1.3.0/dijit/themes/tundra/images/treeExpand_minus.gif');
+		}
+		#excluder .closed .icon {
+			background-image:url('http://o.aolcdn.com/dojo/1.3.0/dijit/themes/tundra/images/treeExpand_plus.gif');
+		}
 	</style>
 
 	<!-- load Dojo -->
@@ -135,7 +149,7 @@
 				"id='ex" + id + "'> <label for='ex" + id + "'>" + id + "</label>" +
 				"</div>",
 			which);
-		}
+		};
 		
 		// the main function. fired as a load: callback to the data fetching exercise
 		var makeCharts = function(data){
@@ -166,9 +180,10 @@
 			setMessage("Generating Charts");
 												
 			// create the main chart 
-			var metaChart = new dojox.charting.Chart2D("masterChartHolder");
-			metaChart.setTheme(DarkHorse);
-			metaChart.addPlot("default", { type:"Bars", gap: 5 });
+			var metaChart = new dojox.charting.Chart2D("masterChartHolder")
+				.setTheme(DarkHorse)
+				.addPlot("default", { type:"Bars", gap: 5 })
+			;
 
 			// generate the labels/data set for the calculated averages
 			var avg = data.everything.averages,
@@ -201,31 +216,33 @@
 
 			// make a master chart of each individual browser chart, so it scales
 			// uniformly. display separate from individuals.
-			var browserGroupChart = new dojox.charting.Chart2D("supermeta");
-			browserGroupChart.setTheme(DarkHorse);
-			browserGroupChart.addPlot("default", { type:"ClusteredColumns", gap: 5 });
-			browserGroupChart.addAxis("y", dojo.delegate(yAxisConfig, {
-				// we know the labels, because we know the libraries now.
-				labels: l, 
-				vertical:false, 
-				major:50, minor:50
-			}));
-			browserGroupChart.addAxis("x",{ 
-				fixUpper:"major", fixLower:"major",
-				vertical:true, major:1, minor:1,
-				natural:true, includeZero:false 
-			});
+			var browserGroupChart = new dojox.charting.Chart2D("supermeta")
+				.setTheme(DarkHorse)
+				.addPlot("default", { type:"ClusteredColumns", gap: 5 })
+				.addAxis("y", dojo.delegate(yAxisConfig, {
+					// we know the labels, because we know the libraries now.
+					labels: l, 
+					vertical:false, 
+					major:50, minor:50
+				}))
+				.addAxis("x",{ 
+					fixUpper:"major", fixLower:"major",
+					vertical:true, major:1, minor:1,
+					natural:true, includeZero:false 
+				})
+			;
 
 			// make a master chart of each browser, to group individual library tests to scale
 			// (like browserGroupChart, but backwards)
-			var libraryGroupChart = new dojox.charting.Chart2D("librarycharts");
-			libraryGroupChart.setTheme(DarkHorse);
-			libraryGroupChart.addPlot("default", { type:"ClusteredColumns", gap: 5 });
-			libraryGroupChart.addAxis("x",{ 
-				fixUpper:"major", fixLower:"major", 
-				vertical:true, major:1, minor:1, 
-				natural:true, includeZero:false
-			});
+			var libraryGroupChart = new dojox.charting.Chart2D("librarycharts")
+				.setTheme(DarkHorse)
+				.addPlot("default", { type:"ClusteredColumns", gap: 5 })
+				.addAxis("x",{ 
+					fixUpper:"major", fixLower:"major", 
+					vertical:true, major:1, minor:1, 
+					natural:true, includeZero:false
+				})
+			;
 			
 			// iterate over the calculated per-browser tests for each library
 			var br = data.byBrowser,
@@ -243,9 +260,10 @@
 				var n = dojo.place("<div><h3>" + lib + "</h3><div class='tchart' id='" + id + "'></div></div>", "alllibrarycharts");		
 				
 				// make a chart for this library, by browser
-				var libchart = new dojox.charting.Chart2D(id);
-				libchart.setTheme(DarkHorse);	
-				libchart.addPlot("default", { type:"Bars", gap:2 });
+				var libchart = new dojox.charting.Chart2D(id)
+					.setTheme(DarkHorse)
+					.addPlot("default", { type:"Bars", gap:2 })
+				;
 
 				// loop over the browsers we know, generating labels for the library
 				var ss = [], ll = [];
@@ -257,19 +275,19 @@
 				browserLabels = ll; // stash this outside for libraryGroupChart
 
 				libchart.addAxis("y", {
-					fixLower: "major", fixUpper: "major", fixLower:"major", 
-					includeZero: false, major:1, minor:1, min:0
-				});
-				libchart.addAxis("x", dojo.delegate(yAxisConfig, {
-					labels: ll
-				}));
+						fixLower: "major", fixUpper: "major", fixLower:"major", 
+						includeZero: false, major:1, minor:1, min:0
+					})
+					.addAxis("x", dojo.delegate(yAxisConfig, {
+						labels: ll
+					}))
+					// the individual charts here have a "thermal" gradient
+					.addSeries(id, ss, thermalFill)
+				;
 
 				// we want to add each framework dataset to the group chart
 				libraryGroupChart.addSeries(id, ss);
-				
-				// the individual charts here have a "thermal" gradient
-				libchart.addSeries(id, ss, thermalFill);
-				
+					
 				// push these to be rendered later
 				allLibCharts.push(libchart);
 				
@@ -292,8 +310,9 @@
 				var ba = dojo.place("<div><h4>" + i + "</h4><div class='chart' id='" + id + "'></div></div>", "byBrowser");
 
 				// build a chart for this browser data
-				var chart = new dojox.charting.Chart2D(id);
-				chart.addPlot("default", { type: "Bars", gap:2 });
+				var chart = new dojox.charting.Chart2D(id)
+					.addPlot("default", { type: "Bars", gap:2 })
+				;
 				
 				var series = [], labels = [];
 				for(var lib in br[i]){
@@ -304,14 +323,19 @@
 
 				// define the layout of the chart, and the labels
 				chart.addAxis("y", {
-					fixUpper: "major", fixLower:"major", includeZero: true, major:1, minor:0, min:0
-				});
-				chart.addAxis("x", dojo.delegate(yAxisConfig, {
-					labels: labels
-				}));
-
-				// add this browser's series of data to it's own chart
-				chart.addSeries(id, series, thermalFill);
+						fixUpper: "major",
+						fixLower:"major",
+						includeZero: true,
+						major:1,
+						minor:0,
+						min:0
+					})
+					.addAxis("x", dojo.delegate(yAxisConfig, {
+						labels: labels
+					}))
+					// add this browser's series of data to it's own chart
+					.addSeries(id, series, thermalFill)
+				;
 				
 				// add this browsers's series of data to the browser-scaled-chart
 				browserGroupChart.addSeries(id, series);
@@ -320,9 +344,11 @@
 				allCharts.push(chart);
 			}
 			
-			// render the first two charts, and make one have a legend
+			// render the first two charts
 			metaChart.render();
 			browserGroupChart.render();
+			
+			// and make one have a legend
 			var groupLegend = new dojox.charting.widget.Legend({
 				chart: browserGroupChart
 			}, "supermetaLegend");
@@ -350,13 +376,15 @@
 		};
 		
 		var getForm = function(){
-			// get a list of checked boxes to build up the exclude string
+			// get a list of checked boxes to build up the exclude string,
+			// and set the window location to the new url
 			window.location.search = "?exclude=" + 
 				dojo.query("#excluder input")
 					.filter(function(n){ return n.checked; })
 					.map(function(n){ return n.value; })
-					.join("+");
-		}
+					.join("+")
+				;
+		};
 
 		dojo.extend(dojo.NodeList, {
 			SlideTitles: function(){ 
@@ -364,6 +392,7 @@
 					var open = true, t = dojo.query("> div", n)[0];
 					dojo.query("legend", n)
 						.onclick(function(e){
+							n.className = open ? "closed" : "open";
 							dojo.fx[(open ? "wipeOut" : "wipeIn")]({
 								node: t
 							}).play();
@@ -382,9 +411,10 @@
 							clearTimeout(timer); delete timer;
 						}
 						timer = setTimeout(function(){
-							dojo.anim(n, { "top" : dojo._docScroll().y + pos.y });	
+							dojo.anim(n, { top: dojo._docScroll().y + pos.y });	
 						}, 175);
-					})
+					});
+					
 				}) : this;
 			}
 		});
@@ -399,8 +429,8 @@
 				getForm();
 			});
 			
+			// use the plugins defined above:
 			dojo.query("#excluder").fixed().query("fieldset").SlideTitles();
-			
 			
 			setMessage("Loading Data");
 			
@@ -417,6 +447,7 @@
 </head>
 <body class="tundra">
 	<div id="container">
+		
 		<div class='fit'>
 			<h1><span id="message"></span>TaskSpeed Reports</h1>
 			<p>
@@ -430,11 +461,11 @@
 			<form action="charts.html" method="get">
 				<button type="submit">Reload Charts</button>
 				<fieldset>
-					<legend>Exclude Library:</legend>
+					<legend><span class="icon"></span> Exclude Library:</legend>
 					<div id="libsBox"></div>
 				</fieldset>
 				<fieldset>
-					<legend>Exclude Browser:</legend>
+					<legend><span class="icon"></span> Exclude Browser:</legend>
 					<div id="browsersBox"></div>
 				</fieldset>
 			</form>
@@ -469,11 +500,7 @@
 			</div>
 			
 		</div>
-
-		<p class='fit'>
-			You can exclude any library or browsers results by passing an ?exclude= parameter to the url. The value is a "+" joined list of the id's as they happen to be. eg: to disable IE 8.0 and Firefox 2 add ?exclude=ie80+firefox20 ... The id's are generated based on a regexp and how php get_browser describes a particular useragent, or the library name stripped of all complex characters. eg: Dojo 1.3.0 -> dojo130
-		</p>
-		
+				
 	</div>
 </body>
 </html>
