@@ -18,12 +18,12 @@ window.tests = {
             fromcode.appendChild(li.cloneNode(true)).appendChild(document.createTextNode("three"));
             body.appendChild(fromcode);
         };
-        return  $.getSimple.call(body, "ul.fromcode").length;
+        return  utility.getSimple.call(body, "ul.fromcode").length;
     },
 
     "indexof" : function(){
         for(var body = document.body, index = -1, i = 0; i < 20; ++i)
-            index   = $.indexOf.call(body.getElementsByTagName("ul"), document.getElementById("setid150"));
+            index   = utility.indexOf.call(body.getElementsByTagName("ul"), document.getElementById("setid150"));
         return  index;
     },
 
@@ -32,7 +32,7 @@ window.tests = {
             node = li[i];
             if(node.parentNode.nodeName == "UL"){
                 ++total;
-                $.addEventListener.call(node, "click", callback, false);
+                utility.addEventListener.call(node, "click", callback, false);
             };
         };
         return  total;
@@ -49,9 +49,9 @@ window.tests = {
             node = li[i];
             if(node.parentNode.nodeName == "UL"){
                 ++total;
-                $.addEventListener.call(node, "mouseover", callback, false);
+                utility.addEventListener.call(node, "mouseover", callback, false);
                 node.setAttribute("rel", "touched");
-                $.removeEventListener.call(node, "mouseover", callback, false);
+                utility.removeEventListener.call(node, "mouseover", callback, false);
             };
         };
         return  total;
@@ -87,7 +87,7 @@ window.tests = {
         var a = document.createElement("a");
         a.setAttribute("href", "http://example.com");
         a.appendChild(document.createTextNode("link"));
-        for(var ul = $.getSimple.call(document.body, "ul.fromcode"), length = ul.length, i = 0, total = 0, childNodes, j, len, node; i < length; ++i){
+        for(var ul = utility.getSimple.call(document.body, "ul.fromcode"), length = ul.length, i = 0, total = 0, childNodes, j, len, node; i < length; ++i){
             childNodes = ul[i].childNodes;
             j   = 0;
             len = childNodes.length;
@@ -121,7 +121,7 @@ window.tests = {
     },
 
     "style" : function(){
-        for(var div = $.getSimple.call(document.body, "div.added"), length = div.length, i = 0, style; i < length; ++i){
+        for(var div = utility.getSimple.call(document.body, "div.added"), length = div.length, i = 0, style; i < length; ++i){
             style = div[i].style;
             style.backgroundColor = "#ededed";
             style.color = "#fff";
@@ -130,7 +130,7 @@ window.tests = {
     },
 
     "removeclass" : function(){
-        for(var re = /\s*\badded\b/g, div = $.getSimple.call(document.body, "div.added"), length = div.length, i = 0, node; i < length; ++i){
+        for(var re = /\s*\badded\b/g, div = utility.getSimple.call(document.body, "div.added"), length = div.length, i = 0, node; i < length; ++i){
             node = div[i];
             node.className = node.className.replace(re, "");
         };
@@ -144,7 +144,7 @@ window.tests = {
     },
 
     "insertbefore" : function(){
-        for(var p = document.createElement("p"), ul = $.getSimple.call(document.body, "ul.fromcode"), length = ul.length, i = 0, total = 0; i < length; ++i){
+        for(var p = document.createElement("p"), ul = utility.getSimple.call(document.body, "ul.fromcode"), length = ul.length, i = 0, total = 0; i < length; ++i){
             for(var a = ul[i].getElementsByTagName("a"), len = a.length, j = 0, node; j < len; ++j){
                 ++total;
                 node    = a[j];
@@ -155,7 +155,7 @@ window.tests = {
     },
 
     "insertafter" : function(){
-        for(var p = document.createElement("p"), ul = $.getSimple.call(document.body, "ul.fromcode"), length = ul.length, i = 0, total = 0; i < length; ++i){
+        for(var p = document.createElement("p"), ul = utility.getSimple.call(document.body, "ul.fromcode"), length = ul.length, i = 0, total = 0; i < length; ++i){
             for(var a = ul[i].getElementsByTagName("a"), len = a.length, j = 0, node; j < len; ++j){
                 ++total;
                 node    = a[j];
@@ -166,7 +166,7 @@ window.tests = {
     },
 
     "destroy": function(){
-        var result  = $.getSimple.call(document.body, "ul.fromcode"),
+        var result  = utility.getSimple.call(document.body, "ul.fromcode"),
             length  = result.length,
             i       = 0,
             node;

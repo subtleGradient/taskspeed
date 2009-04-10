@@ -119,6 +119,10 @@ td.test, td.empty, th {
 	text-align: right;
 }
 
+td.best {
+	background: #A5D072;
+}
+
 td.normal {
 	color: #636A75;
 }

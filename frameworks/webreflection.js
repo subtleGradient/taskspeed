@@ -1,4 +1,4 @@
-var $ = {
+var utility = {
     // essential stuff for TaskSpeed test by WebReflection
     // Mit Style License
     addEventListener:document.addEventListener?

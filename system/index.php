@@ -96,6 +96,7 @@
 <table id="legend">
 
 	<tr>
+		<th>the fastest/baseline</th>
 		<th>the faster</th>
 		<th>the slower</th>
 		<th>exception thrown or zero elements found</th>
@@ -103,6 +104,7 @@
 	</tr>
 
 	<tr>
+		<td class="best"></td>
 		<td class="good"></td>
 		<td class="bad"></td>
 		<td class="exception"></td>

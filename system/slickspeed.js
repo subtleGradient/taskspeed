@@ -72,6 +72,7 @@ window.onload = function(){
 		}
 	});
 	
+	var submitRun = false;
 	var submitTest = function(data){
 		
 		if(!data || !confirm("Yo! Click OK to send the results back for charting")){
@@ -90,7 +91,10 @@ window.onload = function(){
 			if((e && e.type == "load") || /loaded|complete/.test(s.readyState)){
 				dojo.xhrPost({ 
 					url:"report.php",
-					content: { data: dojo.toJson(pay) }
+					content: { data: dojo.toJson(pay) },
+					load:function(){
+						submitRun = true;
+					}
 				});
 			}
 		}
@@ -107,7 +111,7 @@ window.onload = function(){
 		}
 		var results = test.execute(test.selector);
 		test.cell.className = 'test';
-		test.cell.innerHTML = '<b>'+results.time + ' ms</b><b>' + results.found + ' found</b>';
+		test.cell.innerHTML = '<b>' + results.time + ' ms</b><b>' + results.found + ' found</b>';
 		test.cell.speed = results.time;
 		if (results.error){
 			test.cell.innerHTML = results.time + ' ms | <span class="exception" title="' + results.error + '">error returned</a>';
@@ -157,6 +161,8 @@ window.onload = function(){
 		
 		var min = Math.min.apply(this, speeds);
 		var max = Math.max.apply(this, speeds);
+		// FIXME: is this a good way? should we mean the speeds? median?
+		var threshold = min; // Math.floor(min / 2); // ms
 		
 		var found = [];
 		var mismatch = false;
@@ -170,8 +176,11 @@ window.onload = function(){
 					}
 				});
 			}
-			if (cell.speed == min) cell.className += ' good';
-			else if (cell.speed == max) cell.className += ' bad';
+			
+			var s = cell.speed;
+			if (s == min) cell.className += ' best';
+			else if (s <= min + threshold) cell.className += ' good';
+			else if (s >= max - threshold) cell.className += ' bad';
 			else cell.className += ' normal';
 		});
 		
