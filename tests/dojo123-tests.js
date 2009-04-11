@@ -28,8 +28,9 @@ window.tests = {
 	},
 	
 	"bindattr" : function(){
+		var someFn = function(){};
 		return dojo.query("ul > li").forEach(function(n){
-			var c = dojo.connect(n, "mouseover", function(){});
+			var c = dojo.connect(n, "mouseover", someFn);
 			dojo.attr(n, "rel", "touched");
 			dojo.disconnect(c);
 		}).length;

@@ -36,6 +36,9 @@ window.tests = {
 		//	set the rel="" attribute of those nodes to 'touched'
 		//	disconnect the mouseover event
 		//	return the length of the connected nodes
+		//	note: either create an anonymous function to reference once,
+		//	or use the library public "no-op" function to avoid creating
+		//	a function object for each iteration.
 	},
 
 	"table": function(){
