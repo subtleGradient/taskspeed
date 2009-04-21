@@ -139,7 +139,10 @@ window.tests = {
 	},
 	
 	"finale": function(){
-		document.body.innerHTML = ''; // Same as other library's empty methods
+		var body = document.body;
+		while ( body.firstChild ) {
+			body.removeChild(body.firstChild);
+		}
 		return YAHOO.util.Selector.query('body *').length;
 	}
 	
