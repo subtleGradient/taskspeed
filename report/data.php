@@ -63,12 +63,21 @@
 		$totals = array();
 		$averages = array();
 		$libs = array();
+		$platforms = array();
 		
 		foreach($data as $item){
 			
 			// find out which browser this test was run in.
 			$ua = get_browser($item -> ua, true);
 			$b = $ua["browser"] . " " . $ua["version"];
+			
+			// man i wished php give you easier shorthands :)
+			// $platforms[$p] = $platforms[$p] ? $platforms[$p]++ : 0;
+			$p = $ua["platform"];
+			if(empty($platforms[$p])){
+				$platforms[$p] = 0;
+			}
+			$platforms[$p]++;
 			
 			$scores = $item -> scores;
 			
@@ -106,7 +115,8 @@
 			"browsers" => $ret,
 			"totals" => $totals,
 			"averages" => $averages,
-			"libraries" => $libs
+			"libraries" => $libs,
+			"platforms" => array_unique($platforms)
 		);
 	}
 

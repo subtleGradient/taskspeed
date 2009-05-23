@@ -75,9 +75,6 @@
 			height:16px;
 			background:url('http://o.aolcdn.com/dojo/1.3.0/dijit/themes/tundra/images/treeExpand_minus.gif') no-repeat center center;
 		}
-		#excluder .open .icon {
-			background-image:url('http://o.aolcdn.com/dojo/1.3.0/dijit/themes/tundra/images/treeExpand_minus.gif');
-		}
 		#excluder .closed .icon {
 			background-image:url('http://o.aolcdn.com/dojo/1.3.0/dijit/themes/tundra/images/treeExpand_plus.gif');
 		}
@@ -151,9 +148,24 @@
 			which);
 		};
 		
+		var placeIn = function(obj, id, key){
+			var tb = dojo.place("<table></table>", id);
+			for(var i in obj){
+				dojo.place(
+					"<tr><td>" + i + "</td><td>" +
+					(obj[i][key] ? obj[i][key].length : obj[i]) 
+					+ "</td></tr>", 
+				tb);
+			}
+		}
+		
 		// the main function. fired as a load: callback to the data fetching exercise
 		var makeCharts = function(data){
 
+			// console.log(data);
+			placeIn(data.everything.browsers, "brttl", "tests");
+			placeIn(data.everything.platforms, "pfttl");
+			
 			// define a new theme based on our color group
 			var DarkHorse = new dojox.charting.Theme({
 				chart: { fill: "transparent" },
@@ -392,11 +404,13 @@
 					var open = true, t = dojo.query("> div", n)[0];
 					dojo.query("legend", n)
 						.onclick(function(e){
-							n.className = open ? "closed" : "open";
+							n.className = open ? "closed" : "";
 							dojo.fx[(open ? "wipeOut" : "wipeIn")]({
-								node: t
+								node: t,
+								onEnd: function(){
+									open = !open;
+								}
 							}).play();
-							open = !open;
 						})
 					;
 				});
@@ -496,11 +510,21 @@
 			
 			<div class="fit" id="alllibrarycharts">
 				<h2>Libraries</h2>
-				<p>Breakdown of all available browser tests per library.</p>			
+				<p>Breakdown of all available browser tests per library.</p>
 			</div>
-			
 		</div>
 				
+		<div class="fit">
+			<h3>Other Info:</h3>
+			<fieldset>
+				<legend>Platform Totals</legend>
+				<div id="pfttl"></div>
+			</fieldset>
+			<fieldset>
+				<legend>Browser Totals</legend>
+				<div id="brttl"></div>
+			</fieldset>
+		</div>
 	</div>
 </body>
 </html>
