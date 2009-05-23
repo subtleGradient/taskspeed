@@ -85,7 +85,7 @@ window.onload = function(){
 		}
 		
 		var s = document.createElement('script');
-		s.src = "frameworks/dojo-130.js";
+		s.src = "frameworks/dojo-131.js";
 		var h = document.getElementsByTagName("head")[0];
 		s.onload = s.onreadystatechange = function(e){
 			if((e && e.type == "load") || /loaded|complete/.test(s.readyState)){
