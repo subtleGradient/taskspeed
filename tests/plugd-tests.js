@@ -71,7 +71,8 @@ window.tests = {
 	},
 	
 	"sethtml": function(){
-		return $("div").addContent("<p>new content</p>", "only").length;
+		$("div").addContent("<p>new content</p>", "only");
+		return $("div").length;
 	},
 	
 	"insertbefore" : function(){

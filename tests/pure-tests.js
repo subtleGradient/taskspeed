@@ -136,11 +136,12 @@ window.tests = {
         };
         return  length;
     },
-
+    
     "sethtml": function(){
-        for(var div = document.body.getElementsByTagName("div"), length = div.length, i = 0; i < length; ++i)
-            div.innerHTML = "<p>new content</p>";
-        return  div.length;
+            var div = document.body.getElementsByTagName("div"), i = 0;
+            while(div[i])
+                div[i++].innerHTML = "<p>new content</p>";
+            return  document.body.getElementsByTagName("div").length;
     },
 
     "insertbefore" : function(){

@@ -68,7 +68,8 @@ window.tests = {
 	},
 	
 	"sethtml": function(){
-		return $("div").html("<p>new content</p>").length;
+		$("div").html("<p>new content</p>");
+		return $("div").length;
 	},
 	
 	"insertbefore" : function(){

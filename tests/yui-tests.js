@@ -111,9 +111,10 @@ window.tests = {
 	},
 	
 	"sethtml": function(){
-		return YAHOO.util.Dom.batch(YAHOO.util.Selector.query('div'), function(div){
+		YAHOO.util.Dom.batch(YAHOO.util.Selector.query('div'), function(div){
 			div.innerHTML = '<p>new content</p>';
-		}).length;
+		});
+		return YAHOO.util.Selector.query("div").length;
 	},
 	
 	"insertbefore" : function(){

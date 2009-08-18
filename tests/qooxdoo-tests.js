@@ -103,7 +103,8 @@ window.tests = {
 	},
 	
 	"sethtml": function(){
-		return qx.bom.Collection.query("div").setAttribute("html", "<p>new content</p>").length;
+		qx.bom.Collection.query("div").setAttribute("html", "<p>new content</p>");
+		return qx.bom.Collection.query("div").length;
 	},
 	
 	"insertbefore" : function(){

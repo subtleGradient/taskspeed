@@ -88,7 +88,8 @@ window.tests = {
 	},
 	
 	"sethtml": function(){
-		return dojo.query("div").addContent("<p>new content</p>", "only").length;
+		dojo.query("div").addContent("<p>new content</p>", "only")
+		return dojo.query("div").length;
 	},
 	
 	"sethtml-alt" : function(){

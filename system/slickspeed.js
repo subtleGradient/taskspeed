@@ -12,7 +12,7 @@ window.onload = function(){
 	
 	forEach(document.getElementsByTagName('iframe'), function(iframe){
 		frameworks[iframe.name] = {
-			'test': window.frames[iframe.name].test,
+			'test': iframe.contentWindow.test,
 			'selectors': []
 		};
 	});

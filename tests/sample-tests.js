@@ -95,7 +95,7 @@ window.tests = {
 	"sethtml": function(){
 		// replace the content of all div elements with "<p>new content</p>"
 		//
-		// return the length of matched divs
+		// return the length of number of divs in the page POST setting operation (eg: re-requery "div")
 	},
 	
 	"insertbefore" : function(){

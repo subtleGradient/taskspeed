@@ -99,7 +99,8 @@ window.tests = {
 	},
 	
 	"sethtml": function(){
-		return $$('div').set('html', "<p>new content</p>").length;
+		$$('div').set('html', "<p>new content</p>");
+		return $$("div").length;
 	},
 	
 	"sethtml-alt": function(){

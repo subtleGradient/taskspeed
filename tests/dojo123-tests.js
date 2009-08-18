@@ -83,9 +83,10 @@ window.tests = {
 	},
 	
 	"sethtml": function(){
-		return dojo.query("div").forEach(function(n){
+		dojo.query("div").forEach(function(n){
 			n.innerHTML = "<p>new content</p>"
-		}).length;
+		});
+		return dojo.query("div").length;
 	},
 	
 	"insertbefore" : function(){

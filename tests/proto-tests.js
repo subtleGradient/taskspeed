@@ -108,9 +108,9 @@ window.tests = {
 	},
 	
 	"sethtml": function(){
-		var divs = $$('body div');
+		var divs = $$('div');
 		divs.invoke('update', "<p>new content</p>");
-		return divs.length;
+		return $$("div").length;
 	},
 	
 	"sethtml-alt" : function(){
