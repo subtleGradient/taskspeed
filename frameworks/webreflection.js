@@ -1,32 +1,38 @@
 var utility = {
     // essential stuff for TaskSpeed test by WebReflection
     // Mit Style License
-    addEventListener:document.addEventListener?
-        function(name, callback, bool){
-            this.addEventListener(name, callback, bool);
+    attachEvent:document.addEventListener?
+        function(name, callback){
+            this.addEventListener(name.slice(2), callback, false);
         }:
-        function(name, callback, bool){
-            this.attachEvent("on" + name, callback);
+        function(name, callback){
+            this.attachEvent(name, callback);
         }
     ,
-    getSimple:function(selector){
-        for(var
-            split   = selector.split("."),
-            result  = [],
-            re      = new RegExp("\\b" + split[1] + "\\b"),
-            list    = this.getElementsByTagName(split[0] || "*"),
-            length  = list.length,
-            i       = 0,
-            j       = 0,
-            node;
-            i < length; ++i
-        ){
-            node = list[i];
-            if(re.test(node.className))
-                result[j++] = node;
-        };
-        return  result;
-    },
+    getSimple:document.createElement("p").querySelectorAll&&false?
+        function(selector){
+            return this.querySelectorAll(selector);
+        }:
+        function(selector){
+            for(var
+                split   = selector.split("."),
+                result  = [],
+                re      = new RegExp("(?:^|\\s)" + split[1] + "(?:\\s|$)"),
+                list    = this.getElementsByTagName(split[0] || "*"),
+                length  = list.length,
+                i       = 0,
+                j       = 0,
+                node;
+                i < length; ++i
+            ){
+                node = list[i];
+                if(re.test(node.className))
+                    result[j++] = node
+                ;
+            };
+            return  result;
+        }
+    ,
     indexOf:Array.prototype.indexOf || function(value){
         var i = 0, length = this.length;
         while(i < length){
@@ -36,11 +42,11 @@ var utility = {
         };
         return -1;
     },
-    removeEventListener:document.removeEventListener?
-        function(name, callback, bool){
-            this.removeEventListener(name, callback, bool);
+    detachEvent:document.removeEventListener?
+        function(name, callback){
+            this.removeEventListener(name.slice(2), callback, false);
         }:
-        function(name, callback, bool){
-            this.detachEvent("on" + name, callback);
+        function(name, callback){
+            this.detachEvent(name, callback);
         }
 };

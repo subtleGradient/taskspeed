@@ -3,55 +3,84 @@ window.tests = {
 
     "make": function(){
         for(var
-            body = document.body,
-            ul = document.createElement("ul"),
-            li = document.createElement("li"),
-            i = 0,
+            d   = document, body = d.body,
+            ul  = d.createElement("ul"),
+            one  = d.createElement("li").appendChild(d.createTextNode("one")).parentNode,
+            two  = d.createElement("li").appendChild(d.createTextNode("two")).parentNode,
+            three= d.createElement("li").appendChild(d.createTextNode("three")).parentNode,
+            i   = 0,
             fromcode;
             i < 250; ++i
         ){
             fromcode    = ul.cloneNode(true);
             fromcode.id = "setid" + i;
             fromcode.className = "fromcode";
-            fromcode.appendChild(li.cloneNode(true)).appendChild(document.createTextNode("one"));
-            fromcode.appendChild(li.cloneNode(true)).appendChild(document.createTextNode("two"));
-            fromcode.appendChild(li.cloneNode(true)).appendChild(document.createTextNode("three"));
+            fromcode.appendChild(one.cloneNode(true));
+            fromcode.appendChild(two.cloneNode(true));
+            fromcode.appendChild(three.cloneNode(true));
             body.appendChild(fromcode);
         };
         return  utility.getSimple.call(body, "ul.fromcode").length;
     },
 
     "indexof" : function(){
-        for(var body = document.body, index = -1, i = 0; i < 20; ++i)
-            index   = utility.indexOf.call(body.getElementsByTagName("ul"), document.getElementById("setid150"));
+        for(var
+            indexOf = utility.indexOf,
+            d = document, body = d.body,
+            index = -1, i = 0;
+            i < 20; ++i
+        )
+            index   = indexOf.call(body.getElementsByTagName("ul"), d.getElementById("setid150"))
+        ;
         return  index;
     },
 
     "bind" : function(){
-        for(var callback = function(){}, li = document.body.getElementsByTagName("li"), length = li.length, i = 0, total = 0, node; i < length; ++i){
+        for(var
+            attachEvent = utility.attachEvent,
+            callback = function(){},
+            li = document.body.getElementsByTagName("li"),
+            length = li.length, i = 0, total = 0,
+            node;
+            i < length; ++i
+        ){
             node = li[i];
             if(node.parentNode.nodeName == "UL"){
                 ++total;
-                utility.addEventListener.call(node, "click", callback, false);
+                attachEvent.call(node, "onclick", callback);
             };
         };
         return  total;
     },
 
     "attr" : function(){
-        for(var result = [], ul = document.body.getElementsByTagName("ul"), length = ul.length, i = 0; i < length; ++i)
-            result[i] = ul[i].id;
+        for(var
+            ul = document.body.getElementsByTagName("ul"),
+            result = [],
+            length = ul.length, i = 0;
+            i < length; ++i
+        )
+            result[i] = ul[i].id
+        ;
         return  result.length;
     },
 
     "bindattr" : function(){
-        for(var callback = function(){}, li = document.body.getElementsByTagName("li"), length = li.length, i = 0, total = 0, node; i < length; ++i){
+        for(var
+            attachEvent = utility.attachEvent,
+            detachEvent = utility.detachEvent,
+            callback = function(){},
+            li = document.body.getElementsByTagName("li"),
+            length = li.length, i = 0, total = 0,
+            node;
+            i < length; ++i
+        ){
             node = li[i];
             if(node.parentNode.nodeName == "UL"){
                 ++total;
-                utility.addEventListener.call(node, "mouseover", callback, false);
+                attachEvent.call(node, "onmouseover", callback);
                 node.setAttribute("rel", "touched");
-                utility.removeEventListener.call(node, "mouseover", callback, false);
+                detachEvent.call(node, "onmouseover", callback);
             };
         };
         return  total;
@@ -59,10 +88,11 @@ window.tests = {
 
     "table": function(){
         for(var
-            body    = document.body,
-            table   = document.createElement("table").appendChild(document.createElement("tbody")).parentNode,
-            tr      = document.createElement("tr"),
-            td      = document.createElement("td"),
+            d       = document, body = d.body,
+            table   = d.createElement("table").appendChild(d.createElement("tbody")).parentNode,
+            tr      = d.createElement("tr"),
+            td      = d.createElement("td"),
+            first   = td.cloneNode(true).appendChild(d.createTextNode("first")).parentNode,
             length  = 40,
             i = 0,
             madetable,
@@ -71,33 +101,27 @@ window.tests = {
         ){
             madetable = table.cloneNode(true);
             madetable.className = "madetable";
-            cell = body.appendChild(madetable).firstChild.appendChild(tr.cloneNode(true)).appendChild(td.cloneNode(true));
-            cell.appendChild(document.createTextNode("first"));
+            cell = body.appendChild(madetable).firstChild.appendChild(tr.cloneNode(true)).appendChild(first.cloneNode(true));
             cell.parentNode.insertBefore(td.cloneNode(true), cell);
         };
         tr = body.getElementsByTagName("tr");
-        length = tr.length;
-        i = 0;
-        for(var total = 0; i < length; ++i)
-            total += tr[i].getElementsByTagName("td").length;
+        i = tr.length;
+        for(var total = 0; i;)
+            total += tr[--i].getElementsByTagName("td").length
+        ;
         return  total;
     },
 
     "addanchor" : function(){
-        var a = document.createElement("a");
+        var d = document, a = d.createElement("a");
         a.setAttribute("href", "http://example.com");
-        a.appendChild(document.createTextNode("link"));
-        for(var ul = utility.getSimple.call(document.body, "ul.fromcode"), length = ul.length, i = 0, total = 0, childNodes, j, len, node; i < length; ++i){
-            childNodes = ul[i].childNodes;
-            j   = 0;
-            len = childNodes.length;
-            while(j < len){
-                node = childNodes[j];
-                if(node.nodeName === "LI"){
+        a.appendChild(d.createTextNode("link"));
+        for(var ul = utility.getSimple.call(d.body, "ul.fromcode"), length = ul.length, i = 0, total = 0, childNodes, j, len, node; i < length; ++i){
+            if(node = ul[i].firstChild){
+                do {
                     ++total;
                     node.appendChild(a.cloneNode(true));
-                };
-                ++j;
+                }   while(node = node.nextSibling);
             };
         };
         return  total;
@@ -110,7 +134,8 @@ window.tests = {
             body.appendChild(node);
         };
         for(var div = body.getElementsByTagName("div"), length = div.length, i = 0, total = 0; i < length; ++i)
-            total += div[i].getAttribute("rel") === "foo2";
+            total += div[i].getAttribute("rel") === "foo2"
+        ;
         return  total;
     },
 
@@ -130,7 +155,7 @@ window.tests = {
     },
 
     "removeclass" : function(){
-        for(var re = /\s*\badded\b/g, div = utility.getSimple.call(document.body, "div.added"), length = div.length, i = 0, node; i < length; ++i){
+        for(var re = /(?:^|\s)added(?:\s|$)/, div = utility.getSimple.call(document.body, "div.added"), length = div.length, i = 0, node; i < length; ++i){
             node = div[i];
             node.className = node.className.replace(re, "");
         };
@@ -138,51 +163,54 @@ window.tests = {
     },
     
     "sethtml": function(){
-            var div = document.body.getElementsByTagName("div"), i = 0;
-            while(div[i])
-                div[i++].innerHTML = "<p>new content</p>";
-            return  document.body.getElementsByTagName("div").length;
+        var div = document.body.getElementsByTagName("div"), i = 0, node;
+        while(node = div[i++])
+            node.innerHTML = "<p>new content</p>"
+        ;
+        return  div.length;
     },
 
     "insertbefore" : function(){
-        for(var p = document.createElement("p"), ul = utility.getSimple.call(document.body, "ul.fromcode"), length = ul.length, i = 0, total = 0; i < length; ++i){
+        for(var
+            d = document, p = d.createElement("p"), ul = utility.getSimple.call(d.body, "ul.fromcode"), text = d.createTextNode("A Link"),
+            length = ul.length, i = 0, total = 0;
+            i < length; ++i
+        ){
             for(var a = ul[i].getElementsByTagName("a"), len = a.length, j = 0, node; j < len; ++j){
                 ++total;
-                node    = a[j];
-                node.parentNode.insertBefore(p.cloneNode(true).appendChild(document.createTextNode("A Link")).parentNode, node);
+                (node = a[j]).parentNode.insertBefore(p.cloneNode(true).appendChild(text.cloneNode(true)).parentNode, node);
             };                
         };
         return  total;
     },
 
     "insertafter" : function(){
-        for(var p = document.createElement("p"), ul = utility.getSimple.call(document.body, "ul.fromcode"), length = ul.length, i = 0, total = 0; i < length; ++i){
+        for(var
+            d = document, p = d.createElement("p"), ul = utility.getSimple.call(d.body, "ul.fromcode"), text = d.createTextNode("After Link"),
+            length = ul.length, i = 0, total = 0; i < length; ++i
+        ){
             for(var a = ul[i].getElementsByTagName("a"), len = a.length, j = 0, node; j < len; ++j){
                 ++total;
-                node    = a[j];
-                node.parentNode.appendChild(p.cloneNode(true).appendChild(document.createTextNode("After Link")).parentNode);
-            };                
+                (node = a[j]).parentNode.insertBefore(p.cloneNode(true).appendChild(text.cloneNode(true)).parentNode, node.nextSibling);
+            };
         };
         return  total;
     },
 
     "destroy": function(){
-        var result  = utility.getSimple.call(document.body, "ul.fromcode"),
-            length  = result.length,
-            i       = 0,
-            node;
-        while(i < length){
-            node = result[i++];
+        var ul = utility.getSimple.call(document.body, "ul.fromcode"), i = 0, node;
+        while(node = ul[i++])
             node.parentNode.removeChild(node);
-        };
-        return  length;
+        ;
+        return  i - 1;
     },
 
     "finale": function(){
-        var body = document.body;
-        while(body.firstChild)
-            body.removeChild(body.firstChild);
-        return  body.getElementsByTagName("*").length;
+        var body = document.body, node;
+        while(node = body.firstChild)
+            body.removeChild(node)
+        ;
+        return body.getElementsByTagName("*").length;
     }
 
 };
